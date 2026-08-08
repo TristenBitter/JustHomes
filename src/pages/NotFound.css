@@ -1,0 +1,124 @@
+.not-found-page {
+  position: fixed;
+  inset: 0;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100vw !important;
+  height: 100vh !important;
+
+  margin: 0 !important;
+  padding: 40px 20px !important;
+
+  box-sizing: border-box !important;
+
+  background: #f7f5f0 !important;
+  color: #1f2933 !important;
+
+  text-align: center !important;
+}
+
+.not-found-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 100% !important;
+  max-width: 650px !important;
+
+  margin: 0 auto !important;
+}
+
+.not-found-house {
+  display: block !important;
+
+  margin: 0 0 24px !important;
+
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
+  font-size: 80px !important;
+  line-height: 1 !important;
+}
+
+.not-found-code {
+  display: block !important;
+
+  margin: 0 0 12px !important;
+
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+
+  font-weight: 700 !important;
+  letter-spacing: 5px !important;
+
+  color: #667085 !important;
+}
+
+.not-found-card h1 {
+  display: block !important;
+
+  margin: 0 0 12px !important;
+
+  font-size: 36px !important;
+  line-height: 1.1 !important;
+
+  font-weight: 800 !important;
+
+  color: #1f2933 !important;
+}
+
+.not-found-card h2 {
+  display: block !important;
+
+  margin: 0 0 20px !important;
+
+  font-size: 32px !important;
+  line-height: 1.2 !important;
+
+  font-weight: 600 !important;
+
+  color: #1f2933 !important;
+}
+
+.not-found-card p {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 520px !important;
+
+  margin: 0 auto 32px !important;
+
+  font-size: 18px !important;
+  line-height: 1.6 !important;
+
+  color: #667085 !important;
+}
+
+.not-found-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+
+  margin: 0 !important;
+  padding: 14px 24px !important;
+
+  border-radius: 8px !important;
+
+  background: #1f2933 !important;
+  color: #ffffff !important;
+
+  font-size: 16px !important;
+  font-weight: 600 !important;
+
+  text-decoration: none !important;
+
+  cursor: pointer !important;
+}
+
+.not-found-button:hover {
+  background: #374151 !important;
+}
