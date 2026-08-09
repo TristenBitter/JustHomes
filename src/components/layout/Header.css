@@ -1,0 +1,122 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(247, 245, 240, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.site-brand__mark {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.site-nav__link {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  padding: var(--space-2) 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.site-nav__link:hover {
+  color: var(--color-text);
+}
+
+.site-nav__link--active {
+  color: var(--color-text);
+  border-bottom-color: var(--color-accent);
+}
+
+.site-nav__cta {
+  padding: 0.6rem 1.25rem;
+  font-size: var(--font-size-sm);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  width: 18px;
+  margin-inline: auto;
+  background: var(--color-text);
+}
+
+@media (max-width: 860px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-nav {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-3) var(--space-5) var(--space-5);
+    display: none;
+  }
+
+  .site-nav--open {
+    display: flex;
+  }
+
+  .site-nav__link {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-nav__link--active {
+    border-bottom-color: var(--color-border);
+  }
+
+  .site-nav__cta {
+    margin-top: var(--space-4);
+    width: 100%;
+  }
+}
