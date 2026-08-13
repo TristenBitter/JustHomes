@@ -1,0 +1,60 @@
+.step-indicator {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-5);
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-7);
+}
+
+.step-indicator__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.step-indicator__marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+}
+
+.step-indicator__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.step-indicator__item--current .step-indicator__marker {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.step-indicator__item--current .step-indicator__label {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.step-indicator__item--done .step-indicator__marker {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-inverse);
+}
+
+.step-indicator__item--done .step-indicator__label {
+  color: var(--color-text);
+}
+
+@media (max-width: 700px) {
+  .step-indicator__label {
+    display: none;
+  }
+}

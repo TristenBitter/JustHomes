@@ -4,6 +4,8 @@ import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
+import ApplyHub from "./pages/Apply/ApplyHub";
+import ApplicationWizard from "./pages/Apply/ApplicationWizard";
 
 function App() {
   return (
@@ -29,15 +31,9 @@ function App() {
               />
             }
           />
-          <Route
-            path="/apply"
-            element={
-              <ComingSoon
-                title="Apply"
-                description="Our online rental application is almost ready. Soon you'll be able to complete your entire application here."
-              />
-            }
-          />
+          <Route path="/apply" element={<ApplyHub />} />
+          <Route path="/apply/apartment" element={<ApplicationWizard applicationType="apartment" />} />
+          <Route path="/apply/rent-to-own" element={<ApplicationWizard applicationType="rent-to-own" />} />
           <Route
             path="/about"
             element={
