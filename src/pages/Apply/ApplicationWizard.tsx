@@ -9,7 +9,9 @@ import {
   type ApplicationType,
   type SubmittedApplication,
 } from "../../types/application";
-import { saveApplication } from "../../services/applications";
+import { submitApplication } from "../../services/applications";
+import { ApiError } from "../../services/api";
+import type { UploadedDocument } from "../../services/uploads";
 import StepIndicator from "../../components/application/StepIndicator";
 import PropertyStep from "./steps/PropertyStep";
 import ApplicantInfoStep from "./steps/ApplicantInfoStep";
@@ -17,6 +19,7 @@ import EmploymentStep from "./steps/EmploymentStep";
 import ResidenceHistoryStep from "./steps/ResidenceHistoryStep";
 import HouseholdStep from "./steps/HouseholdStep";
 import ReferencesStep from "./steps/ReferencesStep";
+import DocumentsStep from "./steps/DocumentsStep";
 import PurchaseDetailsStep from "./steps/PurchaseDetailsStep";
 import ReviewStep from "./steps/ReviewStep";
 import Confirmation from "./Confirmation";
@@ -36,6 +39,9 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
   const [searchParams] = useSearchParams();
   const [stepIndex, setStepIndex] = useState(0);
   const [submitted, setSubmitted] = useState<SubmittedApplication | null>(null);
+  const [documents, setDocuments] = useState<UploadedDocument[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const propertyType = applicationType === "apartment" ? "apartment" : "house";
   const schema = applicationType === "apartment" ? apartmentApplicationSchema : rentToOwnApplicationSchema;
@@ -92,6 +98,17 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
         fields: ["references", "emergencyContactName", "emergencyContactRelationship", "emergencyContactPhone"],
         render: () => <ReferencesStep />,
       },
+      {
+        label: "Documents",
+        fields: [],
+        render: () => (
+          <DocumentsStep
+            documents={documents}
+            onAdd={(doc) => setDocuments((docs) => [...docs, doc])}
+            onRemove={(key) => setDocuments((docs) => docs.filter((doc) => doc.key !== key))}
+          />
+        ),
+      },
     ];
 
     if (applicationType === "rent-to-own") {
@@ -105,11 +122,11 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     base.push({
       label: "Review",
       fields: ["certifyTrue", "authorizeBackgroundCheck", "consentEmailDelivery", "signatureFullName"],
-      render: () => <ReviewStep applicationType={applicationType} />,
+      render: () => <ReviewStep applicationType={applicationType} documentCount={documents.length} />,
     });
 
     return base;
-  }, [applicationType, propertyType]);
+  }, [applicationType, propertyType, documents]);
 
   const isLastStep = stepIndex === steps.length - 1;
   const currentStep = steps[stepIndex];
@@ -127,10 +144,22 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const onSubmit = methods.handleSubmit((values) => {
-    const result = saveApplication(applicationType, values);
-    setSubmitted(result);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const onSubmit = methods.handleSubmit(async (values) => {
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const result = await submitApplication(applicationType, values, documents);
+      setSubmitted(result);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setSubmitError(
+        error instanceof ApiError
+          ? error.message
+          : "Something went wrong submitting your application. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   });
 
   if (submitted) {
@@ -155,18 +184,24 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
         >
           {currentStep.render()}
 
+          {submitError && (
+            <p className="form-field__error" role="alert">
+              {submitError}
+            </p>
+          )}
+
           <div className="application-wizard__actions">
             <button
               type="button"
               className="btn btn-secondary"
               onClick={handleBack}
-              disabled={stepIndex === 0}
+              disabled={stepIndex === 0 || submitting}
             >
               Back
             </button>
             {isLastStep ? (
-              <button type="submit" className="btn btn-primary">
-                Submit Application
+              <button type="submit" className="btn btn-primary" disabled={submitting}>
+                {submitting ? "Submitting…" : "Submit Application"}
               </button>
             ) : (
               <button type="button" className="btn btn-primary" onClick={handleNext}>

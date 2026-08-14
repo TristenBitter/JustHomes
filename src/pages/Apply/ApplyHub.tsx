@@ -53,7 +53,7 @@ function ApplyHub() {
         <div className="apply-hub__my-applications">
           <h2>My Submitted Applications</h2>
           <p className="apply-hub__my-applications-note">
-            Saved on this device only, for now — automatic email delivery isn't connected yet.
+            Shown here for quick reference on this device. A copy was also emailed to you.
           </p>
           <ul>
             {myApplications.map((application) => {

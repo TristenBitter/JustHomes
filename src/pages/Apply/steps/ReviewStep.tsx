@@ -7,9 +7,10 @@ import "./steps.css";
 
 interface ReviewStepProps {
   applicationType: ApplicationType;
+  documentCount: number;
 }
 
-function ReviewStep({ applicationType }: ReviewStepProps) {
+function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
   const {
     register,
     watch,
@@ -82,6 +83,14 @@ function ReviewStep({ applicationType }: ReviewStepProps) {
           <dl className="review-summary__row">
             <dt>Vehicles</dt>
             <dd>{values.vehicles?.length ?? 0}</dd>
+          </dl>
+        </div>
+
+        <div className="review-summary__section">
+          <h3>Documents</h3>
+          <dl className="review-summary__row">
+            <dt>Attached</dt>
+            <dd>{documentCount}</dd>
           </dl>
         </div>
 

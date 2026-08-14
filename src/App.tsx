@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
@@ -6,6 +6,12 @@ import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import ApplyHub from "./pages/Apply/ApplyHub";
 import ApplicationWizard from "./pages/Apply/ApplicationWizard";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminCallback from "./pages/Admin/AdminCallback";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminApplications from "./pages/Admin/AdminApplications";
+import AdminApplicationDetail from "./pages/Admin/AdminApplicationDetail";
+import ProtectedAdminRoute from "./pages/Admin/ProtectedAdminRoute";
 
 function App() {
   return (
@@ -53,6 +59,17 @@ function App() {
             }
           />
         </Route>
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/callback" element={<AdminCallback />} />
+        <Route element={<ProtectedAdminRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="applications" replace />} />
+            <Route path="applications" element={<AdminApplications />} />
+            <Route path="applications/:id" element={<AdminApplicationDetail />} />
+          </Route>
+        </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
