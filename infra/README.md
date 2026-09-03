@@ -30,4 +30,20 @@ This never sends your AWS credentials anywhere outside your machine. After it fi
 
 ## Ongoing deploys via GitHub Actions
 
-Once `AWS_INFRA_ROLE_ARN` (a scoped OIDC deploy role — see the checklist for the trust policy) is added as a repo secret, pushes to `main` that touch `infra/**` deploy automatically via `deploy-infra.yml`, mirroring the existing frontend deploy pattern.
+Once you've bootstrapped and deployed manually at least once (above), automate future `infra/` changes with a scoped OIDC role:
+
+1. Get your AWS account ID (`aws sts get-caller-identity --query Account --output text`) and note the region you deployed to.
+2. In `deploy-role-trust-policy.json` and `deploy-role-permissions-policy.json`, replace `<ACCOUNT_ID>` and `<REGION>` with those values. The permissions policy only allows assuming the CDK bootstrap roles (`cdk-hnb659fds-*`) — it deliberately doesn't grant direct create/delete permissions on DynamoDB, S3, etc. directly, since CloudFormation does the actual resource creation under the bootstrap roles. This mirrors the existing frontend deploy role's least-privilege pattern, just for a different set of services.
+3. Create the role:
+   ```bash
+   aws iam create-role --role-name JustHomesInfraDeployRole \
+     --assume-role-policy-document file://deploy-role-trust-policy.json
+
+   aws iam put-role-policy --role-name JustHomesInfraDeployRole \
+     --policy-name cdk-bootstrap-assume \
+     --policy-document file://deploy-role-permissions-policy.json
+   ```
+   (Skip creating the OIDC provider itself if `token.actions.githubusercontent.com` is already registered in your account — it almost certainly is, from the existing frontend deploy role.)
+4. Add the resulting role ARN as the `AWS_INFRA_ROLE_ARN` secret in GitHub (Settings → Secrets and variables → Actions → Secrets), and confirm the `AWS_REGION` repo variable is set (it's likely already there from the frontend workflow).
+
+After that, pushes to `main` that touch `infra/**` deploy automatically via `deploy-infra.yml`, mirroring the existing frontend deploy pattern.

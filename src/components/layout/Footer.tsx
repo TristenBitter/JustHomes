@@ -25,6 +25,7 @@ function Footer() {
           <Link to="/apply">Apply</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
+          <Link to="/privacy">Privacy</Link>
         </nav>
 
         <p className="site-footer__copyright">© {year} JustHomes. All rights reserved.</p>

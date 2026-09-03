@@ -1,0 +1,42 @@
+.privacy {
+  padding-block: var(--space-9) var(--space-8);
+  max-width: 720px;
+}
+
+.privacy__eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.privacy h1 {
+  margin-bottom: var(--space-2);
+}
+
+.privacy__updated {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-7);
+}
+
+.privacy section {
+  margin-bottom: var(--space-6);
+}
+
+.privacy h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-3);
+}
+
+.privacy p {
+  color: var(--color-text-muted);
+  line-height: 1.65;
+}
+
+.privacy__link {
+  color: var(--color-accent);
+  font-weight: 600;
+}

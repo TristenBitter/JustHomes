@@ -4,10 +4,17 @@ import "./Admin.css";
 
 function AdminLogin() {
   const [starting, setStarting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setStarting(true);
-    beginAdminLogin();
+    setError(null);
+    try {
+      await beginAdminLogin();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Sign in isn't available right now.");
+      setStarting(false);
+    }
   };
 
   return (
@@ -18,6 +25,11 @@ function AdminLogin() {
       <button type="button" className="btn btn-primary" onClick={handleSignIn} disabled={starting}>
         {starting ? "Redirecting…" : "Sign in"}
       </button>
+      {error && (
+        <p className="form-field__error" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

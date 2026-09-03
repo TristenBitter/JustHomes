@@ -7,6 +7,10 @@ const VERIFIER_KEY = "justhomes.admin.pkceVerifier";
 const STATE_KEY = "justhomes.admin.oauthState";
 const TOKENS_KEY = "justhomes.admin.tokens";
 
+export function isAdminAuthConfigured(): boolean {
+  return Boolean(COGNITO_DOMAIN && CLIENT_ID && REDIRECT_URI && LOGOUT_URI);
+}
+
 interface StoredTokens {
   accessToken: string;
   idToken: string;
@@ -29,6 +33,10 @@ async function sha256(value: string): Promise<ArrayBuffer> {
 }
 
 export async function beginAdminLogin(): Promise<void> {
+  if (!isAdminAuthConfigured()) {
+    throw new Error("Admin sign-in isn't configured yet. The backend hasn't been deployed.");
+  }
+
   const verifier = randomString(32);
   const state = randomString(16);
   const challenge = base64UrlEncode(await sha256(verifier));

@@ -1,0 +1,78 @@
+.about {
+  padding-block: var(--space-9) var(--space-8);
+  max-width: 880px;
+}
+
+.about__eyebrow {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.about h1 {
+  margin-bottom: var(--space-4);
+}
+
+.about__subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  max-width: 640px;
+  margin-bottom: var(--space-8);
+  line-height: 1.6;
+}
+
+.about__values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.about-value-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.about-value-card__icon {
+  display: inline-block;
+  font-size: 2rem;
+  margin-bottom: var(--space-4);
+}
+
+.about-value-card h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-2);
+}
+
+.about-value-card p {
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.about__cta {
+  background: var(--color-text);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+}
+
+.about__cta h2 {
+  color: var(--color-text-inverse);
+  margin-bottom: var(--space-2);
+}
+
+.about__cta p {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: var(--space-5);
+}
+
+@media (max-width: 860px) {
+  .about__values {
+    grid-template-columns: 1fr;
+  }
+}

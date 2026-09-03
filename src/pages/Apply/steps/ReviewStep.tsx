@@ -1,4 +1,5 @@
 import { useFormContext } from "react-hook-form";
+import { Link } from "react-router-dom";
 import type { ApplicationFormValues, ApplicationType } from "../../../types/application";
 import { getPropertyById } from "../../../services/properties";
 import { formatPropertyAddress } from "../../../types/property";
@@ -108,6 +109,11 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
           </div>
         )}
       </div>
+
+      <p className="app-step__description">
+        By submitting, you agree to how we handle your information — see our{" "}
+        <Link to="/privacy">Privacy Policy</Link>.
+      </p>
 
       <div className="checkbox-field">
         <input id="certifyTrue" type="checkbox" {...register("certifyTrue")} />

@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
 import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import ApplyHub from "./pages/Apply/ApplyHub";
@@ -40,24 +43,9 @@ function App() {
           <Route path="/apply" element={<ApplyHub />} />
           <Route path="/apply/apartment" element={<ApplicationWizard applicationType="apartment" />} />
           <Route path="/apply/rent-to-own" element={<ApplicationWizard applicationType="rent-to-own" />} />
-          <Route
-            path="/about"
-            element={
-              <ComingSoon
-                title="About JustHomes"
-                description="Learn more about our family-owned business and the Phoenix-area communities we serve."
-              />
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <ComingSoon
-                title="Contact"
-                description="Contact details for the JustHomes team are coming soon."
-              />
-            }
-          />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLogin />} />
