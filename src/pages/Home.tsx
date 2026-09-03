@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import heroImage from "../assets/hero-home.jpg";
 import "./Home.css";
 
 const STEPS = [
@@ -23,6 +24,12 @@ function Home() {
   return (
     <>
       <section className="hero">
+        <img
+          src={heroImage}
+          alt="A JustHomes property at dusk in the Phoenix, Arizona area"
+          className="hero__image"
+        />
+        <div className="hero__overlay" aria-hidden="true" />
         <div className="container hero__inner">
           <p className="hero__eyebrow">Phoenix, Arizona</p>
           <h1>Find your next home, without the paperwork.</h1>
