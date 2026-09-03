@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
+import emblem from "../../assets/JustHomesEmblem.png";
 import "./Header.css";
 
 const NAV_LINKS = [
@@ -17,10 +18,7 @@ function Header() {
     <header className="site-header">
       <div className="container site-header__inner">
         <Link to="/" className="site-brand" onClick={() => setMenuOpen(false)}>
-          <span className="site-brand__mark" aria-hidden="true">
-            🏡
-          </span>
-          JustHomes
+          <img src={emblem} alt="JustHomes" className="site-brand__emblem" />
         </Link>
 
         <button

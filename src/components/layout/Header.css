@@ -18,17 +18,13 @@
 .site-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: var(--font-size-md);
-  font-weight: 700;
   text-decoration: none;
-  color: var(--color-text);
-  letter-spacing: -0.01em;
 }
 
-.site-brand__mark {
-  font-size: 1.5rem;
-  line-height: 1;
+.site-brand__emblem {
+  height: 64px;
+  width: auto;
+  display: block;
 }
 
 .site-nav {
@@ -83,6 +79,10 @@
 }
 
 @media (max-width: 860px) {
+  .site-brand__emblem {
+    height: 52px;
+  }
+
   .nav-toggle {
     display: flex;
   }

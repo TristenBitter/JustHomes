@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/JustHomesLogo.png";
 import "./Footer.css";
 
 function Footer() {
@@ -8,15 +9,10 @@ function Footer() {
     <footer className="site-footer">
       <div className="container site-footer__inner">
         <div className="site-footer__brand">
-          <span className="site-brand__mark" aria-hidden="true">
-            🏡
-          </span>
-          <div>
-            <p className="site-footer__title">JustHomes</p>
-            <p className="site-footer__tagline">
-              Family-owned rental properties, proudly serving the Phoenix, Arizona area.
-            </p>
-          </div>
+          <img src={logo} alt="JustHomes" className="site-footer__logo" />
+          <p className="site-footer__tagline">
+            Family-owned rental properties, proudly serving the Phoenix, Arizona area.
+          </p>
         </div>
 
         <nav className="site-footer__links" aria-label="Footer">
