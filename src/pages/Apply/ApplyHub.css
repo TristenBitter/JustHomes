@@ -50,7 +50,14 @@
 }
 
 .apply-path-card__icon {
-  font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
 }
 
 .apply-path-card p {

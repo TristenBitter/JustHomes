@@ -1,21 +1,22 @@
 import { Link } from "react-router-dom";
+import { Clock, Handshake, MapPinHouse } from "lucide-react";
 import "./About.css";
 
 const VALUES = [
   {
-    icon: "⏱️",
+    icon: Clock,
     title: "Your time matters",
     description:
       "Applying for a place to live shouldn't mean printing paperwork or playing phone tag. Everything happens online, start to finish.",
   },
   {
-    icon: "🤝",
+    icon: Handshake,
     title: "Family-owned, hands-on",
     description:
       "JustHomes is a family-owned property management business. When you apply, a real person on our team reviews it — not a call center.",
   },
   {
-    icon: "🌵",
+    icon: MapPinHouse,
     title: "Rooted in the Phoenix area",
     description: "We manage apartments and rent-to-own homes across the greater Phoenix metro area.",
   },
@@ -35,7 +36,7 @@ function About() {
         {VALUES.map((value) => (
           <div className="about-value-card" key={value.title}>
             <span className="about-value-card__icon" aria-hidden="true">
-              {value.icon}
+              <value.icon size={26} strokeWidth={1.75} />
             </span>
             <h2>{value.title}</h2>
             <p>{value.description}</p>

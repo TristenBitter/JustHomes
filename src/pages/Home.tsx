@@ -1,20 +1,21 @@
 import { Link } from "react-router-dom";
+import { Search, ClipboardSignature, KeyRound } from "lucide-react";
 import heroImage from "../assets/hero-home.jpg";
 import "./Home.css";
 
 const STEPS = [
   {
-    icon: "🔍",
+    icon: Search,
     title: "Browse",
     description: "Search available rentals across the Phoenix area and find the right fit.",
   },
   {
-    icon: "📝",
+    icon: ClipboardSignature,
     title: "Apply Online",
     description: "Complete your rental application from any device — no printing, no office visit.",
   },
   {
-    icon: "🔑",
+    icon: KeyRound,
     title: "Move In",
     description: "We review your application and get you into your new home faster.",
   },
@@ -56,7 +57,7 @@ function Home() {
               <div className="step-card" key={step.title}>
                 <span className="step-card__number">{index + 1}</span>
                 <span className="step-card__icon" aria-hidden="true">
-                  {step.icon}
+                  <step.icon size={26} strokeWidth={1.75} />
                 </span>
                 <h3>{step.title}</h3>
                 <p>{step.description}</p>

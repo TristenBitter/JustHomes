@@ -6,8 +6,8 @@
 }
 
 .confirmation__icon {
-  font-size: 3rem;
-  display: inline-block;
+  display: inline-flex;
+  color: var(--color-success);
   margin-bottom: var(--space-4);
 }
 

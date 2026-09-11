@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CheckCircle2 } from "lucide-react";
 import type { SubmittedApplication } from "../../types/application";
 import { getPropertyById } from "../../services/properties";
 import { formatPropertyAddress } from "../../types/property";
@@ -14,7 +15,7 @@ function Confirmation({ application }: ConfirmationProps) {
   return (
     <div className="confirmation container">
       <span className="confirmation__icon" aria-hidden="true">
-        ✅
+        <CheckCircle2 size={40} strokeWidth={1.75} />
       </span>
       <h1>Application submitted</h1>
       <p className="confirmation__body">

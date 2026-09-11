@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Building2, House } from "lucide-react";
 import PropertyPicker from "../../components/application/PropertyPicker";
 import { getMyApplications } from "../../services/applications";
 import { getPropertyById } from "../../services/properties";
@@ -28,7 +29,7 @@ function ApplyHub() {
       <div className="apply-hub__paths">
         <Link to="/apply/apartment" className="apply-path-card">
           <span className="apply-path-card__icon" aria-hidden="true">
-            🏢
+            <Building2 size={28} strokeWidth={1.75} />
           </span>
           <h2>Apply to Rent an Apartment</h2>
           <p>Complete a rental application for one of our apartment units.</p>
@@ -37,7 +38,7 @@ function ApplyHub() {
 
         <Link to="/apply/rent-to-own" className="apply-path-card">
           <span className="apply-path-card__icon" aria-hidden="true">
-            🏠
+            <House size={28} strokeWidth={1.75} />
           </span>
           <h2>Apply to Rent-to-Own a Home</h2>
           <p>Complete an application for one of our rent-to-own houses.</p>

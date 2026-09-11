@@ -39,8 +39,14 @@
 }
 
 .about-value-card__icon {
-  display: inline-block;
-  font-size: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
   margin-bottom: var(--space-4);
 }
 
