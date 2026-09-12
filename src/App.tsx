@@ -31,15 +31,6 @@ function App() {
               />
             }
           />
-          <Route
-            path="/map"
-            element={
-              <ComingSoon
-                title="Property Map"
-                description="An interactive map of available Phoenix-area properties is coming soon."
-              />
-            }
-          />
           <Route path="/apply" element={<ApplyHub />} />
           <Route path="/apply/apartment" element={<ApplicationWizard applicationType="apartment" />} />
           <Route path="/apply/rent-to-own" element={<ApplicationWizard applicationType="rent-to-own" />} />

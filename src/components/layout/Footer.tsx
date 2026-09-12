@@ -17,7 +17,6 @@ function Footer() {
 
         <nav className="site-footer__links" aria-label="Footer">
           <Link to="/properties">Properties</Link>
-          <Link to="/map">Map</Link>
           <Link to="/apply">Apply</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>

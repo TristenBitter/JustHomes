@@ -5,7 +5,6 @@ import "./Header.css";
 
 const NAV_LINKS = [
   { to: "/properties", label: "Properties" },
-  { to: "/map", label: "Map" },
   { to: "/apply", label: "Apply" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
