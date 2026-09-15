@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import heroImage from "../assets/hero-home.jpg";
+import PageHero from "../components/marketing/PageHero";
 import TestimonialsCarousel from "../components/marketing/TestimonialsCarousel";
 import "./Home.css";
 
@@ -24,27 +25,20 @@ const TESTIMONIALS = [
 function Home() {
   return (
     <>
-      <section className="hero">
-        <img
-          src={heroImage}
-          alt="A JustHomes property at dusk in the Phoenix, Arizona area"
-          className="hero__image"
-        />
-        <div className="hero__overlay" aria-hidden="true" />
-        <div className="container hero__inner">
-          <p className="hero__eyebrow">Phoenix, Arizona</p>
-          <h1>Find your next home, without the paperwork.</h1>
-          <p className="hero__subtitle">
-            JustHomes is a family-owned property management company offering rental apartments and
-            rent-to-own homes. We make it simple to apply and start your path to a new home online.
-          </p>
-          <div className="hero__actions">
-            <Link to="/apply" className="btn btn-primary">
-              Start an Application
-            </Link>
-          </div>
+      <PageHero
+        image={heroImage}
+        imageAlt="A JustHomes property at dusk in the Phoenix, Arizona area"
+        eyebrow="Phoenix, Arizona"
+        title="Find your next home, without the paperwork."
+        subtitle="JustHomes is a family-owned property management company offering rental apartments and rent-to-own homes. We make it simple to apply and start your path to a new home online."
+        tall
+      >
+        <div className="hero__actions">
+          <Link to="/apply" className="btn btn-primary">
+            Start an Application
+          </Link>
         </div>
-      </section>
+      </PageHero>
 
       <section className="value-props">
         <div className="container value-props__grid">

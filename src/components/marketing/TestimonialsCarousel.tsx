@@ -58,7 +58,7 @@ function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
         onWheel={handleWheel}
       >
         <Quote className="testimonials__mark" aria-hidden="true" size={32} strokeWidth={1.5} />
-        <p className="testimonials__quote">{current.quote}</p>
+        <p className="testimonials__quote">&ldquo;{current.quote}&rdquo;</p>
         <p className="testimonials__author">{current.author}</p>
       </div>
 

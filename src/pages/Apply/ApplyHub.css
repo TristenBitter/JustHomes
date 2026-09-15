@@ -1,26 +1,6 @@
 .apply-hub {
-  padding-block: var(--space-9) var(--space-8);
+  padding-block: var(--space-8);
   max-width: 880px;
-}
-
-.apply-hub__eyebrow {
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: var(--space-3);
-}
-
-.apply-hub__intro h1 {
-  margin-bottom: var(--space-4);
-}
-
-.apply-hub__subtitle {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-md);
-  max-width: 620px;
-  margin-bottom: var(--space-5);
 }
 
 .apply-hub__notice {
