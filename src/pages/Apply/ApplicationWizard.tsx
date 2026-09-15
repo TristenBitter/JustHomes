@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { FormProvider, useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,14 +35,12 @@ interface StepConfig {
 }
 
 function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
-  const [searchParams] = useSearchParams();
   const [stepIndex, setStepIndex] = useState(0);
   const [submitted, setSubmitted] = useState<SubmittedApplication | null>(null);
   const [documents, setDocuments] = useState<UploadedDocument[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const propertyType = applicationType === "apartment" ? "apartment" : "house";
   const schema = applicationType === "apartment" ? apartmentApplicationSchema : rentToOwnApplicationSchema;
 
   const methods = useForm<ApplicationFormValues>({
@@ -51,7 +48,6 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues: {
-      propertyId: searchParams.get("property") ?? "",
       occupants: [],
       pets: [],
       vehicles: [],
@@ -65,7 +61,11 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
 
   const steps = useMemo<StepConfig[]>(() => {
     const base: StepConfig[] = [
-      { label: "Property", fields: ["propertyId"], render: () => <PropertyStep propertyType={propertyType} /> },
+      {
+        label: "Property",
+        fields: [],
+        render: () => <PropertyStep applicationType={applicationType} />,
+      },
       {
         label: "Applicant",
         fields: [
@@ -126,7 +126,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     });
 
     return base;
-  }, [applicationType, propertyType, documents]);
+  }, [applicationType, documents]);
 
   const isLastStep = stepIndex === steps.length - 1;
   const currentStep = steps[stepIndex];

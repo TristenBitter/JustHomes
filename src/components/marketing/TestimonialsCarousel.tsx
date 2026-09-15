@@ -11,9 +11,13 @@ interface TestimonialsCarouselProps {
   testimonials: Testimonial[];
 }
 
+const WHEEL_COOLDOWN_MS = 500;
+const WHEEL_THRESHOLD = 25;
+
 function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
   const [index, setIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
+  const lastWheelNav = useRef(0);
 
   const goTo = (next: number) => {
     setIndex((next + testimonials.length) % testimonials.length);
@@ -31,6 +35,18 @@ function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
     touchStartX.current = null;
   };
 
+  const handleWheel = (event: React.WheelEvent) => {
+    // Only react to a clearly horizontal gesture (trackpad swipe), not vertical page scroll.
+    if (Math.abs(event.deltaX) < WHEEL_THRESHOLD || Math.abs(event.deltaX) < Math.abs(event.deltaY)) return;
+
+    const now = Date.now();
+    if (now - lastWheelNav.current < WHEEL_COOLDOWN_MS) return;
+    lastWheelNav.current = now;
+
+    if (event.deltaX > 0) goTo(index + 1);
+    else goTo(index - 1);
+  };
+
   const current = testimonials[index];
 
   return (
@@ -39,6 +55,7 @@ function TestimonialsCarousel({ testimonials }: TestimonialsCarouselProps) {
         className="testimonials__card"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
       >
         <Quote className="testimonials__mark" aria-hidden="true" size={32} strokeWidth={1.5} />
         <p className="testimonials__quote">{current.quote}</p>

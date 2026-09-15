@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { apiGet, ApiError } from "../../services/api";
 import { getAdminAccessToken } from "../../services/adminAuth";
-import { getPropertyById } from "../../services/properties";
-import { formatPropertyAddress } from "../../types/property";
 import type { ApplicationFormValues, ApplicationType } from "../../types/application";
 import "../Apply/steps/steps.css";
 import "./Admin.css";
@@ -11,7 +9,6 @@ import "./Admin.css";
 interface ApplicationDetail {
   applicationId: string;
   applicationType: ApplicationType;
-  propertyId: string;
   submittedAt: string;
   values: ApplicationFormValues;
   documentLinks: { filename: string; url: string }[];
@@ -50,7 +47,6 @@ function AdminApplicationDetail() {
   }
 
   const { values } = application;
-  const property = getPropertyById(application.propertyId);
 
   return (
     <div>
@@ -64,13 +60,15 @@ function AdminApplicationDetail() {
       </p>
 
       <div className="review-summary">
-        <div className="review-summary__section">
-          <h3>Property</h3>
-          <dl className="review-summary__row">
-            <dt>Address</dt>
-            <dd>{property ? formatPropertyAddress(property) : application.propertyId}</dd>
-          </dl>
-        </div>
+        {values.propertyOfInterest && (
+          <div className="review-summary__section">
+            <h3>Property</h3>
+            <dl className="review-summary__row">
+              <dt>Property of interest</dt>
+              <dd>{values.propertyOfInterest}</dd>
+            </dl>
+          </div>
+        )}
 
         <div className="review-summary__section">
           <h3>Applicant</h3>

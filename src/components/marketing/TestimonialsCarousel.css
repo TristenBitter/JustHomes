@@ -9,12 +9,14 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-8) var(--space-7);
-  min-height: 220px;
+  height: 300px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   touch-action: pan-y;
+  cursor: grab;
 }
 
 .testimonials__mark {
@@ -87,6 +89,7 @@
 
 @media (max-width: 700px) {
   .testimonials__card {
+    height: 340px;
     padding: var(--space-6) var(--space-5);
   }
 }

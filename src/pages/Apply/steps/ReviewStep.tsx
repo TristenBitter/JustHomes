@@ -1,8 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 import type { ApplicationFormValues, ApplicationType } from "../../../types/application";
-import { getPropertyById } from "../../../services/properties";
-import { formatPropertyAddress } from "../../../types/property";
 import FormField from "../../../components/application/FormField";
 import "./steps.css";
 
@@ -19,7 +17,6 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
   } = useFormContext<ApplicationFormValues>();
 
   const values = watch();
-  const property = getPropertyById(values.propertyId);
 
   return (
     <div className="app-step">
@@ -29,13 +26,15 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
       </p>
 
       <div className="review-summary">
-        <div className="review-summary__section">
-          <h3>Property</h3>
-          <dl className="review-summary__row">
-            <dt>Address</dt>
-            <dd>{property ? formatPropertyAddress(property) : "—"}</dd>
-          </dl>
-        </div>
+        {values.propertyOfInterest && (
+          <div className="review-summary__section">
+            <h3>Property</h3>
+            <dl className="review-summary__row">
+              <dt>Property of interest</dt>
+              <dd>{values.propertyOfInterest}</dd>
+            </dl>
+          </div>
+        )}
 
         <div className="review-summary__section">
           <h3>Applicant</h3>

@@ -51,7 +51,7 @@ export const purchaseTimelineOptions = [
 ] as const;
 
 export const propertyStepSchema = z.object({
-  propertyId: z.string().min(1, "Select the property you're applying for."),
+  propertyOfInterest: z.string().optional(),
 });
 
 export const applicantInfoStepSchema = z.object({

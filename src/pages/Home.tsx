@@ -46,33 +46,33 @@ function Home() {
         </div>
       </section>
 
-      <section className="lease-option">
-        <div className="container lease-option__inner">
-          <p className="lease-option__eyebrow">Rent to Own · A Path to Homeownership</p>
-          <h2>What is a Lease Option?</h2>
-          <p>
-            A Lease Option, sometimes called compassionate financing, gives you the opportunity to rent a
-            home with the intent and option to purchase it over time, typically within 2–10 years. Instead
-            of simply renting a house with no path forward, you are working toward making that house your
-            own. During the lease period, you can care for the home, personalize it, and make it feel like
-            yours while preparing for ownership. When the lease agreement is fulfilled and the purchase is
-            completed, the home is officially yours.
-          </p>
-          <p className="lease-option__closer">
-            It is more than renting. It is a structured path toward homeownership.
-          </p>
-        </div>
-      </section>
+      <section className="value-props">
+        <div className="container value-props__grid">
+          <div className="value-props__card">
+            <p className="lease-option__eyebrow">Rent to Own · A Path to Homeownership</p>
+            <h2>What is a Lease Option?</h2>
+            <p>
+              A Lease Option, sometimes called compassionate financing, gives you the opportunity to rent a
+              home with the intent and option to purchase it over time, typically within 2–10 years.
+              Instead of simply renting a house with no path forward, you are working toward making that
+              house your own. During the lease period, you can care for the home, personalize it, and make
+              it feel like yours while preparing for ownership. When the lease agreement is fulfilled and
+              the purchase is completed, the home is officially yours.
+            </p>
+            <p className="lease-option__closer">
+              It is more than renting. It is a structured path toward homeownership.
+            </p>
+          </div>
 
-      <section className="about-blurb">
-        <div className="container about-blurb__inner">
-          <h2>A family-owned business that values your time</h2>
-          <p>
-            We know applying for a rental usually means paperwork, phone tag, and waiting.
-            JustHomes was built to change that — a straightforward, digital application
-            process so you can spend less time on forms and more time settling into your
-            new home.
-          </p>
+          <div className="value-props__card">
+            <h2>A family-owned business that values your time</h2>
+            <p>
+              We know applying for a rental usually means paperwork, phone tag, and waiting.
+              JustHomes was built to change that — a straightforward, digital application
+              process so you can spend less time on forms and more time settling into your
+              new home.
+            </p>
+          </div>
         </div>
       </section>
 

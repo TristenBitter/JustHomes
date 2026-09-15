@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
     .map((item) => ({
       applicationId: item.applicationId,
       applicationType: item.applicationType,
-      propertyId: item.propertyId,
+      propertyOfInterest: item.values?.propertyOfInterest,
       submittedAt: item.submittedAt,
       applicantName: `${item.values?.firstName ?? ""} ${item.values?.lastName ?? ""}`.trim(),
       applicantEmail: item.values?.email,

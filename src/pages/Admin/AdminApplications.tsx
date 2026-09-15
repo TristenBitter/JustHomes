@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiGet, ApiError } from "../../services/api";
 import { getAdminAccessToken } from "../../services/adminAuth";
-import { getPropertyById } from "../../services/properties";
-import { formatPropertyAddress } from "../../types/property";
 import "./Admin.css";
 
 interface ApplicationSummary {
   applicationId: string;
   applicationType: "apartment" | "rent-to-own";
-  propertyId: string;
+  propertyOfInterest?: string;
   submittedAt: string;
   applicantName: string;
   applicantEmail: string;
@@ -46,26 +44,23 @@ function AdminApplications() {
             <tr>
               <th>Submitted</th>
               <th>Type</th>
-              <th>Property</th>
+              <th>Property of interest</th>
               <th>Applicant</th>
             </tr>
           </thead>
           <tbody>
-            {applications.map((application) => {
-              const property = getPropertyById(application.propertyId);
-              return (
-                <tr key={application.applicationId}>
-                  <td>{new Date(application.submittedAt).toLocaleString()}</td>
-                  <td>{application.applicationType === "apartment" ? "Apartment" : "Rent-to-own"}</td>
-                  <td>{property ? formatPropertyAddress(property) : application.propertyId}</td>
-                  <td>
-                    <Link to={`/admin/applications/${application.applicationId}`}>
-                      {application.applicantName || application.applicantEmail}
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
+            {applications.map((application) => (
+              <tr key={application.applicationId}>
+                <td>{new Date(application.submittedAt).toLocaleString()}</td>
+                <td>{application.applicationType === "apartment" ? "Apartment" : "Rent-to-own"}</td>
+                <td>{application.propertyOfInterest || "—"}</td>
+                <td>
+                  <Link to={`/admin/applications/${application.applicationId}`}>
+                    {application.applicantName || application.applicantEmail}
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}

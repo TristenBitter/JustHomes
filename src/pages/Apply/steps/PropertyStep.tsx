@@ -1,57 +1,39 @@
 import { useFormContext } from "react-hook-form";
-import { getPropertiesByType } from "../../../services/properties";
-import { formatPropertyAddress, type PropertyType } from "../../../types/property";
-import type { ApplicationFormValues } from "../../../types/application";
+import type { ApplicationFormValues, ApplicationType } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
 import "./steps.css";
 
 interface PropertyStepProps {
-  propertyType: PropertyType;
+  applicationType: ApplicationType;
 }
 
-function PropertyStep({ propertyType }: PropertyStepProps) {
+function PropertyStep({ applicationType }: PropertyStepProps) {
   const {
     register,
-    watch,
     formState: { errors },
   } = useFormContext<ApplicationFormValues>();
 
-  const properties = getPropertiesByType(propertyType);
-  const selectedId = watch("propertyId");
-  const selected = properties.find((property) => property.id === selectedId);
-
   return (
     <div className="app-step">
-      <h2>Select the property</h2>
+      <h2>{applicationType === "apartment" ? "Apartment rental application" : "Rent-to-own application"}</h2>
       <p className="app-step__description">
-        Choose the {propertyType === "apartment" ? "apartment unit" : "home"} you're applying for.
+        We don't currently have any {applicationType === "apartment" ? "apartments" : "homes"} listed as
+        available — all of our properties are occupied. Submitting an application now puts you on file for
+        when a place opens up.
       </p>
 
-      {selected && (
-        <div className="property-summary-card">
-          <div>
-            <p className="property-summary-card__address">{formatPropertyAddress(selected)}</p>
-            <p className="property-summary-card__type">
-              {propertyType === "apartment" ? "Apartment" : "Rent-to-own home"}
-            </p>
-          </div>
-        </div>
-      )}
-
       <FormField
-        label="Property"
-        htmlFor="propertyId"
-        required
-        error={errors.propertyId?.message as string | undefined}
+        label="Is there a specific property you're interested in? (optional)"
+        htmlFor="propertyOfInterest"
+        hint="If you already know of a JustHomes property you'd like to be considered for, let us know here."
+        error={errors.propertyOfInterest?.message}
       >
-        <select id="propertyId" className="form-select" {...register("propertyId")}>
-          <option value="">Select an address…</option>
-          {properties.map((property) => (
-            <option key={property.id} value={property.id}>
-              {formatPropertyAddress(property)}
-            </option>
-          ))}
-        </select>
+        <input
+          id="propertyOfInterest"
+          className="form-input"
+          placeholder="e.g. an address you were told about, or leave blank"
+          {...register("propertyOfInterest")}
+        />
       </FormField>
     </div>
   );

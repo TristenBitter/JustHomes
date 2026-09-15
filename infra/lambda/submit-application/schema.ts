@@ -17,7 +17,7 @@ const optionalPhoneField = () =>
 
 export const submitApplicationSchema = z.object({
   applicationType: z.enum(["apartment", "rent-to-own"]),
-  propertyId: z.string().min(1),
+  propertyOfInterest: z.string().optional(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   dateOfBirth: z.string().min(1),

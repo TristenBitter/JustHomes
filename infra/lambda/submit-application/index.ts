@@ -6,7 +6,6 @@ import { randomUUID } from "crypto";
 import * as nodemailer from "nodemailer";
 import { submitApplicationSchema } from "./schema";
 import { generateApplicationPdf } from "./generatePdf";
-import { formatPropertyAddress } from "./propertyAddresses";
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const ses = new SESClient({});
@@ -46,18 +45,16 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       Item: {
         applicationId,
         applicationType: values.applicationType,
-        propertyId: values.propertyId,
         submittedAt,
         values,
       },
     })
   );
 
-  const propertyAddress = formatPropertyAddress(values.propertyId);
   const label = applicationTypeLabel(values.applicationType);
 
   try {
-    const pdfBuffer = await generateApplicationPdf(values, propertyAddress, applicationId, submittedAt);
+    const pdfBuffer = await generateApplicationPdf(values, applicationId, submittedAt);
 
     const mail = await nodemailer.createTransport({ streamTransport: true, buffer: true }).sendMail({
       from: FROM_EMAIL,
@@ -66,7 +63,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       text: [
         `A new ${label.toLowerCase()} was submitted.`,
         "",
-        propertyAddress,
+        values.propertyOfInterest ? `Property of interest: ${values.propertyOfInterest}` : "",
         `Applicant: ${values.firstName} ${values.lastName}`,
         `Phone: ${values.phone}`,
         `Email: ${values.email}`,

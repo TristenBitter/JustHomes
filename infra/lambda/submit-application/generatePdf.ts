@@ -23,7 +23,6 @@ function field(doc: PDFKit.PDFDocument, label: string, value: string | number | 
 
 export function generateApplicationPdf(
   input: SubmitApplicationInput,
-  propertyAddress: string,
   applicationId: string,
   submittedAt: string
 ): Promise<Buffer> {
@@ -41,8 +40,10 @@ export function generateApplicationPdf(
     doc.fontSize(9).fillColor("#667085").text(`Application ID: ${applicationId}`);
     doc.text(`Submitted: ${new Date(submittedAt).toLocaleString("en-US")}`);
 
-    heading(doc, "Property");
-    field(doc, "Address", propertyAddress);
+    if (input.propertyOfInterest) {
+      heading(doc, "Property");
+      field(doc, "Property of interest", input.propertyOfInterest);
+    }
 
     heading(doc, "Applicant");
     field(doc, "Name", `${input.firstName} ${input.lastName}`);

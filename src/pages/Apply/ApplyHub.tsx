@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Building2, House } from "lucide-react";
-import PropertyPicker from "../../components/application/PropertyPicker";
 import { getMyApplications } from "../../services/applications";
-import { getPropertyById } from "../../services/properties";
-import { formatPropertyAddress } from "../../types/property";
 import type { SubmittedApplication } from "../../types/application";
 import "./ApplyHub.css";
 
@@ -51,31 +48,24 @@ function ApplyHub() {
         </Link>
       </div>
 
-      <div className="apply-hub__picker-wrap">
-        <PropertyPicker />
-      </div>
-
       {myApplications.length > 0 && (
         <div className="apply-hub__my-applications">
           <h2>My Submitted Applications</h2>
           <p className="apply-hub__my-applications-note">Shown here for quick reference on this device.</p>
           <ul>
-            {myApplications.map((application) => {
-              const property = getPropertyById(application.values.propertyId);
-              return (
-                <li key={application.id} className="my-application-row">
-                  <div>
-                    <p className="my-application-row__title">{applicationTypeLabel(application.applicationType)}</p>
-                    <p className="my-application-row__address">
-                      {property ? formatPropertyAddress(property) : "Property unavailable"}
-                    </p>
-                  </div>
-                  <span className="my-application-row__date">
-                    {new Date(application.submittedAt).toLocaleDateString()}
-                  </span>
-                </li>
-              );
-            })}
+            {myApplications.map((application) => (
+              <li key={application.id} className="my-application-row">
+                <div>
+                  <p className="my-application-row__title">{applicationTypeLabel(application.applicationType)}</p>
+                  {application.values.propertyOfInterest && (
+                    <p className="my-application-row__address">{application.values.propertyOfInterest}</p>
+                  )}
+                </div>
+                <span className="my-application-row__date">
+                  {new Date(application.submittedAt).toLocaleDateString()}
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
       )}

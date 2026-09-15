@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { apartmentApplicationSchema, rentToOwnApplicationSchema } from "./application";
 
 const baseApplicant = {
-  propertyId: "gb-1",
   firstName: "Jane",
   lastName: "Doe",
   dateOfBirth: "1990-01-01",
