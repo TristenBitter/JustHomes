@@ -5,7 +5,6 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
-import ComingSoon from "./pages/ComingSoon";
 import NotFound from "./pages/NotFound";
 import ApplyHub from "./pages/Apply/ApplyHub";
 import ApplicationWizard from "./pages/Apply/ApplicationWizard";
@@ -22,15 +21,6 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/properties"
-            element={
-              <ComingSoon
-                title="Properties"
-                description="Our full property listings and search are on the way. Check back soon, or start an application to get on our list."
-              />
-            }
-          />
           <Route path="/apply" element={<ApplyHub />} />
           <Route path="/apply/apartment" element={<ApplicationWizard applicationType="apartment" />} />
           <Route path="/apply/rent-to-own" element={<ApplicationWizard applicationType="rent-to-own" />} />

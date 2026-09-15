@@ -1,13 +1,23 @@
 import { useFormContext } from "react-hook-form";
 import type { ApplicationFormValues } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
+import DateOfBirthField from "../../../components/application/DateOfBirthField";
 import "./steps.css";
+
+function formatSsn(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 9);
+  if (digits.length > 5) return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5)}`;
+  if (digits.length > 3) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return digits;
+}
 
 function ApplicantInfoStep() {
   const {
     register,
     formState: { errors },
   } = useFormContext<ApplicationFormValues>();
+
+  const ssnField = register("ssn");
 
   return (
     <div className="app-step">
@@ -23,20 +33,28 @@ function ApplicantInfoStep() {
         </FormField>
       </div>
 
-      <div className="form-row">
-        <FormField label="Date of birth" htmlFor="dateOfBirth" required error={errors.dateOfBirth?.message}>
-          <input id="dateOfBirth" type="date" className="form-input" {...register("dateOfBirth")} />
-        </FormField>
-        <FormField label="Last 4 of SSN" htmlFor="ssnLast4" required error={errors.ssnLast4?.message}>
-          <input id="ssnLast4" className="form-input" maxLength={4} inputMode="numeric" {...register("ssnLast4")} />
-        </FormField>
-      </div>
+      <DateOfBirthField />
+
+      <FormField label="Social Security Number" htmlFor="ssn" required error={errors.ssn?.message}>
+        <input
+          id="ssn"
+          className="form-input"
+          placeholder="000-00-0000"
+          inputMode="numeric"
+          maxLength={11}
+          {...ssnField}
+          onChange={(event) => {
+            event.target.value = formatSsn(event.target.value);
+            ssnField.onChange(event);
+          }}
+        />
+      </FormField>
 
       <div className="form-row">
-        <FormField label="Phone" htmlFor="phone" required error={errors.phone?.message}>
+        <FormField label="Primary Phone" htmlFor="phone" required error={errors.phone?.message}>
           <input id="phone" type="tel" className="form-input" {...register("phone")} />
         </FormField>
-        <FormField label="Email" htmlFor="email" required error={errors.email?.message}>
+        <FormField label="Email Address" htmlFor="email" required error={errors.email?.message}>
           <input id="email" type="email" className="form-input" {...register("email")} />
         </FormField>
       </div>

@@ -17,10 +17,17 @@ interface ApplicationDetail {
   documentLinks: { filename: string; url: string }[];
 }
 
+function formatDateOfBirth(isoDate: string): string {
+  const [year, month, day] = isoDate.split("-");
+  if (!year || !month || !day) return isoDate;
+  return `${month}/${day}/${year}`;
+}
+
 function AdminApplicationDetail() {
   const { id } = useParams<{ id: string }>();
   const [application, setApplication] = useState<ApplicationDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ssnRevealed, setSsnRevealed] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -75,7 +82,7 @@ function AdminApplicationDetail() {
           </dl>
           <dl className="review-summary__row">
             <dt>Date of birth</dt>
-            <dd>{values.dateOfBirth}</dd>
+            <dd>{formatDateOfBirth(values.dateOfBirth)}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Current address</dt>
@@ -84,8 +91,17 @@ function AdminApplicationDetail() {
             </dd>
           </dl>
           <dl className="review-summary__row">
-            <dt>Last 4 of SSN</dt>
-            <dd>{values.ssnLast4}</dd>
+            <dt>Social Security Number</dt>
+            <dd>
+              {ssnRevealed ? values.ssn : `•••-••-${values.ssn?.slice(-4) ?? "????"}`}{" "}
+              <button
+                type="button"
+                className="admin-inline-toggle"
+                onClick={() => setSsnRevealed((revealed) => !revealed)}
+              >
+                {ssnRevealed ? "Hide" : "Reveal"}
+              </button>
+            </dd>
           </dl>
         </div>
 
@@ -127,11 +143,15 @@ function AdminApplicationDetail() {
           <h3>Household</h3>
           <dl className="review-summary__row">
             <dt>Occupants</dt>
-            <dd>{values.occupants?.map((o) => `${o.name} (${o.relationship}, ${o.age})`).join(", ") || "None"}</dd>
+            <dd>{values.occupants?.map((o) => `${o.name} (${o.relationship}, age ${o.age})`).join(", ") || "None"}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Other adult applicants</dt>
+            <dd>{values.otherAdultApplicants || "None listed"}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Pets</dt>
-            <dd>{values.pets?.map((p) => p.type).join(", ") || "None"}</dd>
+            <dd>{values.pets?.map((p) => `${p.type} (${p.breed})`).join(", ") || "None"}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Vehicles</dt>

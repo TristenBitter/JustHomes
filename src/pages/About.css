@@ -16,12 +16,20 @@
   margin-bottom: var(--space-4);
 }
 
-.about__subtitle {
+.about__narrative {
+  max-width: 680px;
+  margin-bottom: var(--space-8);
+}
+
+.about__narrative p {
   color: var(--color-text-muted);
   font-size: var(--font-size-md);
-  max-width: 640px;
-  margin-bottom: var(--space-8);
-  line-height: 1.6;
+  line-height: 1.7;
+  margin-bottom: var(--space-5);
+}
+
+.about__narrative p:last-child {
+  margin-bottom: 0;
 }
 
 .about__values {

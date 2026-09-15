@@ -13,10 +13,17 @@ function Contact() {
 
       <div className="contact-card">
         <h2>Email us</h2>
-        <a className="contact-card__email" href="mailto:david@justhomes.us">
+        <a className="contact-card__link" href="mailto:david@justhomes.us">
           david@justhomes.us
         </a>
         <p>We typically respond within one business day.</p>
+      </div>
+
+      <div className="contact-card">
+        <h2>Call us</h2>
+        <a className="contact-card__link" href="tel:+14804204881">
+          480-420-4881
+        </a>
       </div>
 
       <div className="contact-card">

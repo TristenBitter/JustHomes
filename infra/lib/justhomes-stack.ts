@@ -9,6 +9,7 @@ import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
 import { HttpLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
 import { HttpJwtAuthorizer } from "aws-cdk-lib/aws-apigatewayv2-authorizers";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as path from "path";
 
 /**
@@ -130,9 +131,25 @@ export class JustHomesStack extends Stack {
       ...commonProps,
       entry: path.join(__dirname, "../lambda/submit-application/index.ts"),
       environment: commonEnv,
+      memorySize: 512,
+      timeout: Duration.seconds(20),
+      bundling: {
+        externalModules: ["@aws-sdk/*"],
+        // pdfkit and nodemailer read files (font metrics, mime data) off disk
+        // relative to their own package directory at runtime — esbuild's
+        // default bundling would inline their JS and lose those files, so
+        // install them as real node_modules instead of bundling them.
+        nodeModules: ["pdfkit", "nodemailer"],
+      },
     });
     applicationsTable.grantWriteData(submitApplicationFn);
     emailIdentity.grantSendEmail(submitApplicationFn);
+    submitApplicationFn.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["ses:SendRawEmail"],
+        resources: [emailIdentity.emailIdentityArn],
+      })
+    );
 
     const createUploadUrlFn = new NodejsFunction(this, "CreateUploadUrlFn", {
       ...commonProps,

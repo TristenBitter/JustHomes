@@ -46,10 +46,12 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
             </dd>
           </dl>
           <dl className="review-summary__row">
-            <dt>Contact</dt>
-            <dd>
-              {values.phone} · {values.email}
-            </dd>
+            <dt>Primary Phone</dt>
+            <dd>{values.phone}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Email Address</dt>
+            <dd>{values.email}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Current address</dt>
@@ -74,8 +76,12 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
         <div className="review-summary__section">
           <h3>Household</h3>
           <dl className="review-summary__row">
-            <dt>Additional occupants</dt>
+            <dt>Intended occupants</dt>
             <dd>{values.occupants?.length ?? 0}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Other adult applicants</dt>
+            <dd>{values.otherAdultApplicants || "None listed"}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Pets</dt>
@@ -138,14 +144,15 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
       )}
 
       <div className="checkbox-field">
-        <input id="consentEmailDelivery" type="checkbox" {...register("consentEmailDelivery")} />
-        <label htmlFor="consentEmailDelivery">
-          I agree to receive a copy of my submitted application and any resulting contract by email.
+        <input id="consentBackgroundCheckSharing" type="checkbox" {...register("consentBackgroundCheckSharing")} />
+        <label htmlFor="consentBackgroundCheckSharing">
+          I consent to JustHomes sharing my name and email address with our background check provider,
+          TenetBackgroundSearch.com, to confirm my identity, as described in the Privacy Policy.
         </label>
       </div>
-      {errors.consentEmailDelivery && (
+      {errors.consentBackgroundCheckSharing && (
         <p className="form-field__error" role="alert">
-          {errors.consentEmailDelivery.message as string}
+          {errors.consentBackgroundCheckSharing.message as string}
         </p>
       )}
 

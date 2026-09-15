@@ -1,7 +1,24 @@
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import type { ApplicationFormValues } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
 import "./steps.css";
+
+interface OccupantAgeNoticeProps {
+  index: number;
+}
+
+function OccupantAgeNotice({ index }: OccupantAgeNoticeProps) {
+  const { control } = useFormContext<ApplicationFormValues>();
+  const age = useWatch({ control, name: `occupants.${index}.age` });
+
+  if (!age || Number(age) < 18) return null;
+
+  return (
+    <p className="app-step__inline-notice">
+      Since this person is 18 or older, they must submit their own separate application.
+    </p>
+  );
+}
 
 function HouseholdStep() {
   const {
@@ -16,13 +33,17 @@ function HouseholdStep() {
 
   return (
     <div className="app-step">
-      <h2>Occupants, pets & vehicles</h2>
+      <h2>Intended occupants, pets & vehicles</h2>
       <p className="app-step__description">
-        List anyone else who will live at the property, plus any pets or vehicles. It's fine to leave
-        these empty if they don't apply.
+        List everyone else who will live at the property, plus any pets or vehicles.
+      </p>
+      <p className="app-step__notice">
+        Every occupant aged 18 or older must submit their own separate application. List them below with
+        their age, and name them again in "Other adult applicants" so we can match up your household's
+        applications.
       </p>
 
-      <h3>Additional occupants</h3>
+      <h3>Intended occupants</h3>
       {occupants.fields.length === 0 && <p className="app-step__empty-note">No additional occupants added.</p>}
       {occupants.fields.map((field, index) => (
         <div key={field.id} className="app-step__array-item">
@@ -70,6 +91,7 @@ function HouseholdStep() {
               />
             </FormField>
           </div>
+          <OccupantAgeNotice index={index} />
         </div>
       ))}
       <button
@@ -79,6 +101,20 @@ function HouseholdStep() {
       >
         + Add occupant
       </button>
+
+      <FormField
+        label="Other adult applicants (18+)"
+        htmlFor="otherAdultApplicants"
+        hint="Names of other adults who will also be living here and submitting their own application."
+        error={errors.otherAdultApplicants?.message}
+      >
+        <textarea
+          id="otherAdultApplicants"
+          className="form-textarea"
+          placeholder="e.g. John Doe, Maria Doe"
+          {...register("otherAdultApplicants")}
+        />
+      </FormField>
 
       <h3>Pets</h3>
       {pets.fields.length === 0 && <p className="app-step__empty-note">No pets added.</p>}
@@ -96,7 +132,12 @@ function HouseholdStep() {
             <FormField label="Type" htmlFor={`pets.${index}.type`} required error={errors.pets?.[index]?.type?.message}>
               <input id={`pets.${index}.type`} className="form-input" {...register(`pets.${index}.type`)} />
             </FormField>
-            <FormField label="Breed" htmlFor={`pets.${index}.breed`} error={errors.pets?.[index]?.breed?.message}>
+            <FormField
+              label="Breed"
+              htmlFor={`pets.${index}.breed`}
+              required
+              error={errors.pets?.[index]?.breed?.message}
+            >
               <input id={`pets.${index}.breed`} className="form-input" {...register(`pets.${index}.breed`)} />
             </FormField>
             <FormField label="Weight" htmlFor={`pets.${index}.weight`} error={errors.pets?.[index]?.weight?.message}>

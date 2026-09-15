@@ -12,12 +12,11 @@ const baseApplicant = {
   currentCity: "Phoenix",
   currentState: "AZ",
   currentZip: "85001",
-  ssnLast4: "1234",
+  ssn: "123-45-6789",
   employerName: "Acme Co",
   jobTitle: "Manager",
   employmentLength: "2 - 5 years",
   monthlyIncome: 5000,
-  employerPhone: "480-555-9999",
   currentAddressDuration: "2 - 5 years",
   residenceType: "Rent",
   occupants: [],
@@ -29,12 +28,17 @@ const baseApplicant = {
   emergencyContactPhone: "480-555-1111",
   certifyTrue: true as const,
   authorizeBackgroundCheck: true as const,
-  consentEmailDelivery: true as const,
+  consentBackgroundCheckSharing: true as const,
   signatureFullName: "Jane Doe",
 };
 
 describe("apartmentApplicationSchema", () => {
   it("accepts a fully filled-out application", () => {
+    const result = apartmentApplicationSchema.safeParse(baseApplicant);
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts an application with no employer phone (optional)", () => {
     expect(apartmentApplicationSchema.safeParse(baseApplicant).success).toBe(true);
   });
 
@@ -44,9 +48,24 @@ describe("apartmentApplicationSchema", () => {
     expect(apartmentApplicationSchema.safeParse(withoutFirstName).success).toBe(false);
   });
 
-  it("rejects an ssnLast4 that isn't exactly 4 digits", () => {
-    const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, ssnLast4: "12" });
-    expect(result.success).toBe(false);
+  it("rejects a full SSN that isn't formatted as 000-00-0000", () => {
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, ssn: "123456789" }).success).toBe(false);
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, ssn: "123-45-678" }).success).toBe(false);
+  });
+
+  it("rejects a phone number that isn't 10 digits", () => {
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, phone: "480-555-12" }).success).toBe(false);
+  });
+
+  it("accepts an optional employer phone when it is a valid 10-digit number", () => {
+    const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, employerPhone: "480-555-9999" });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an invalid calendar date of birth", () => {
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, dateOfBirth: "1990-02-30" }).success).toBe(
+      false
+    );
   });
 
   it("rejects an unchecked required consent checkbox", () => {
@@ -62,6 +81,39 @@ describe("apartmentApplicationSchema", () => {
   it("rejects an invalid email", () => {
     const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, email: "not-an-email" });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects a pet with no breed", () => {
+    const result = apartmentApplicationSchema.safeParse({
+      ...baseApplicant,
+      pets: [{ type: "Dog", breed: "" }],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts a pet with type and breed", () => {
+    const result = apartmentApplicationSchema.safeParse({
+      ...baseApplicant,
+      pets: [{ type: "Dog", breed: "Labrador" }],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an occupant with an unrealistic age", () => {
+    const result = apartmentApplicationSchema.safeParse({
+      ...baseApplicant,
+      occupants: [{ name: "Someone", relationship: "Child", age: 200 }],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts an application listing other adult applicants", () => {
+    const result = apartmentApplicationSchema.safeParse({
+      ...baseApplicant,
+      occupants: [{ name: "John Doe", relationship: "Spouse", age: 32 }],
+      otherAdultApplicants: "John Doe",
+    });
+    expect(result.success).toBe(true);
   });
 });
 

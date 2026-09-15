@@ -26,11 +26,30 @@ function About() {
   return (
     <div className="about container">
       <p className="about__eyebrow">About</p>
-      <h1>A family-owned business, built around your time</h1>
-      <p className="about__subtitle">
-        JustHomes manages rental apartments and rent-to-own homes across the Phoenix, Arizona area. We built this
-        site because applying for a place to live shouldn't take longer than finding one.
-      </p>
+      <h1>About JustHomes</h1>
+
+      <div className="about__narrative">
+        <p>
+          JustHomes is dedicated to making quality housing and homeownership more accessible across the
+          Phoenix, Arizona area. We offer comfortable rental apartments as well as rent-to-own homes
+          through lease options, giving families more choices when it comes to finding a place to live and
+          building toward a home of their own.
+        </p>
+        <p>
+          We believe that having a home should be about more than simply paying rent. Our goal is to
+          provide affordable housing and compassionate financing options for people who want a realistic
+          path toward homeownership but may not be ready for a traditional mortgage today.
+        </p>
+        <p>
+          With our lease option program, qualified residents can live in a home with the intention of
+          purchasing it over time, giving them the opportunity to care for the property, make it their own,
+          and work toward ownership.
+        </p>
+        <p>
+          At JustHomes, we believe everyone deserves the opportunity to have a place they can truly call
+          home.
+        </p>
+      </div>
 
       <div className="about__values">
         {VALUES.map((value) => (
@@ -46,7 +65,7 @@ function About() {
 
       <div className="about__cta">
         <h2>Ready to get started?</h2>
-        <p>Browse our current process or jump straight into an application.</p>
+        <p>Jump straight into an apartment rental or rent-to-own application.</p>
         <Link to="/apply" className="btn btn-primary">
           Start an Application
         </Link>

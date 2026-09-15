@@ -34,7 +34,12 @@ function EmploymentStep() {
             ))}
           </select>
         </FormField>
-        <FormField label="Employer phone" htmlFor="employerPhone" required error={errors.employerPhone?.message}>
+        <FormField
+          label="Employer phone (optional)"
+          htmlFor="employerPhone"
+          hint="Helpful for verifying employment, but not required to submit."
+          error={errors.employerPhone?.message}
+        >
           <input id="employerPhone" type="tel" className="form-input" {...register("employerPhone")} />
         </FormField>
       </div>

@@ -7,6 +7,23 @@
   margin-bottom: var(--space-6);
 }
 
+.app-step__notice {
+  background: var(--color-accent-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  margin-bottom: var(--space-6);
+}
+
+.app-step__inline-notice {
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-top: var(--space-3);
+}
+
 .app-step__array-item {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);

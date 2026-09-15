@@ -7,37 +7,46 @@ import { z } from "zod";
  * separately deployed) stay independently buildable — duplication is
  * deliberate here, not accidental.
  */
+const phoneDigits = (value: string) => value.replace(/\D/g, "");
+const phoneField = () => z.string().refine((v) => phoneDigits(v).length === 10, "Invalid phone number.");
+const optionalPhoneField = () =>
+  z
+    .string()
+    .optional()
+    .refine((v) => !v || phoneDigits(v).length === 10, "Invalid phone number.");
+
 export const submitApplicationSchema = z.object({
   applicationType: z.enum(["apartment", "rent-to-own"]),
   propertyId: z.string().min(1),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   dateOfBirth: z.string().min(1),
-  phone: z.string().min(1),
+  phone: phoneField(),
   email: z.string().email(),
   currentStreet: z.string().min(1),
   currentCity: z.string().min(1),
   currentState: z.string().min(2).max(2),
   currentZip: z.string().min(1),
-  ssnLast4: z.string().regex(/^\d{4}$/),
+  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/),
   driversLicenseNumber: z.string().optional(),
   driversLicenseState: z.string().optional(),
   employerName: z.string().min(1),
   jobTitle: z.string().min(1),
   employmentLength: z.string().min(1),
   monthlyIncome: z.coerce.number().positive(),
-  employerPhone: z.string().min(1),
+  employerPhone: optionalPhoneField(),
   additionalIncomeSource: z.string().optional(),
   additionalIncomeAmount: z.coerce.number().optional(),
   currentAddressDuration: z.string().min(1),
   residenceType: z.string().min(1),
   landlordName: z.string().optional(),
-  landlordPhone: z.string().optional(),
+  landlordPhone: optionalPhoneField(),
   reasonForLeaving: z.string().optional(),
   occupants: z.array(
     z.object({ name: z.string().min(1), relationship: z.string().min(1), age: z.coerce.number() })
   ),
-  pets: z.array(z.object({ type: z.string().min(1), breed: z.string().optional(), weight: z.string().optional() })),
+  otherAdultApplicants: z.string().optional(),
+  pets: z.array(z.object({ type: z.string().min(1), breed: z.string().min(1), weight: z.string().optional() })),
   vehicles: z.array(
     z.object({
       make: z.string().min(1),
@@ -47,18 +56,18 @@ export const submitApplicationSchema = z.object({
     })
   ),
   references: z
-    .array(z.object({ name: z.string().min(1), relationship: z.string().min(1), phone: z.string().min(1) }))
+    .array(z.object({ name: z.string().min(1), relationship: z.string().min(1), phone: phoneField() }))
     .min(1),
   emergencyContactName: z.string().min(1),
   emergencyContactRelationship: z.string().min(1),
-  emergencyContactPhone: z.string().min(1),
+  emergencyContactPhone: phoneField(),
   desiredDownPayment: z.coerce.number().optional(),
   purchaseTimeline: z.string().optional(),
   creditCheckConsent: z.boolean().optional(),
   estimatedCreditRange: z.string().optional(),
   certifyTrue: z.literal(true),
   authorizeBackgroundCheck: z.literal(true),
-  consentEmailDelivery: z.literal(true),
+  consentBackgroundCheckSharing: z.literal(true),
   signatureFullName: z.string().min(1),
   documents: z.array(z.object({ key: z.string().min(1), filename: z.string().min(1) })).optional(),
 });

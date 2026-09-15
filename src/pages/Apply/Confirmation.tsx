@@ -24,8 +24,8 @@ function Confirmation({ application }: ConfirmationProps) {
         <strong>{property ? formatPropertyAddress(property) : "your selected property"}</strong> has been received.
       </p>
       <p className="confirmation__body confirmation__body--note">
-        A confirmation email is on its way to <strong>{application.values.email}</strong>, and our team has been
-        notified. We'll be in touch about next steps.
+        Our team has been notified and will review your application. We'll be in touch about next steps at{" "}
+        <strong>{application.values.phone}</strong> or <strong>{application.values.email}</strong>.
       </p>
       <div className="confirmation__actions">
         <Link to="/apply" className="btn btn-primary">

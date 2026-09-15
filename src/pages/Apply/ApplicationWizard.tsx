@@ -58,7 +58,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
       references: [{ name: "", relationship: "", phone: "" }],
       certifyTrue: undefined,
       authorizeBackgroundCheck: undefined,
-      consentEmailDelivery: undefined,
+      consentBackgroundCheckSharing: undefined,
       creditCheckConsent: undefined,
     } as Partial<ApplicationFormValues>,
   });
@@ -78,7 +78,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
           "currentCity",
           "currentState",
           "currentZip",
-          "ssnLast4",
+          "ssn",
         ],
         render: () => <ApplicantInfoStep />,
       },
@@ -121,7 +121,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
 
     base.push({
       label: "Review",
-      fields: ["certifyTrue", "authorizeBackgroundCheck", "consentEmailDelivery", "signatureFullName"],
+      fields: ["certifyTrue", "authorizeBackgroundCheck", "consentBackgroundCheckSharing", "signatureFullName"],
       render: () => <ReviewStep applicationType={applicationType} documentCount={documents.length} />,
     });
 

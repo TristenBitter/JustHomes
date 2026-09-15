@@ -77,56 +77,57 @@
   }
 }
 
-.how-it-works {
+.lease-option {
   padding-block: var(--space-9);
 }
 
-.how-it-works h2 {
-  margin-bottom: var(--space-6);
-}
-
-.how-it-works__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-5);
-}
-
-.step-card {
-  position: relative;
+.lease-option__inner {
+  max-width: 760px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  padding: var(--space-8) var(--space-7);
+  margin-inline: auto;
 }
 
-.step-card__number {
-  position: absolute;
-  top: var(--space-5);
-  right: var(--space-5);
+.lease-option__eyebrow {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--color-border);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
 }
 
-.step-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: var(--color-accent-bg);
-  color: var(--color-accent);
+.lease-option h2 {
+  margin-bottom: var(--space-5);
+}
+
+.lease-option p {
+  color: var(--color-text-muted);
+  line-height: 1.65;
+  font-size: var(--font-size-md);
   margin-bottom: var(--space-4);
 }
 
-.step-card h3 {
-  margin-bottom: var(--space-2);
+.lease-option__closer {
+  color: var(--color-text) !important;
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: var(--font-size-lg) !important;
+  margin-bottom: 0 !important;
 }
 
-.step-card p {
-  color: var(--color-text-muted);
-  line-height: 1.55;
+.testimonials-section {
+  padding-block: var(--space-9);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.testimonials-section__heading {
+  text-align: center;
+  margin-bottom: var(--space-7);
 }
 
 .about-blurb {
@@ -176,8 +177,8 @@
 }
 
 @media (max-width: 860px) {
-  .how-it-works__grid {
-    grid-template-columns: 1fr;
+  .lease-option__inner {
+    padding: var(--space-6) var(--space-5);
   }
 
   .cta-banner__inner {

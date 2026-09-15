@@ -4,7 +4,6 @@ import emblem from "../../assets/JustHomesEmblem.png";
 import "./Header.css";
 
 const NAV_LINKS = [
-  { to: "/properties", label: "Properties" },
   { to: "/apply", label: "Apply" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },

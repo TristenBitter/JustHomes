@@ -41,13 +41,13 @@
   margin-top: var(--space-3);
 }
 
-.contact-card__email {
+.contact-card__link {
   font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-accent);
   text-decoration: none;
 }
 
-.contact-card__email:hover {
+.contact-card__link:hover {
   text-decoration: underline;
 }

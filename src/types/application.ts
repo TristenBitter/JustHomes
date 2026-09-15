@@ -2,8 +2,35 @@ import { z } from "zod";
 
 export type ApplicationType = "apartment" | "rent-to-own";
 
-const phoneRegex = /^[0-9()+\-.\s]{7,20}$/;
+const phoneDigits = (value: string) => value.replace(/\D/g, "");
+
+function phoneField(label: string) {
+  return z
+    .string()
+    .min(1, `${label} is required.`)
+    .refine((value) => phoneDigits(value).length === 10, `Enter a valid 10-digit ${label.toLowerCase()}.`);
+}
+
+function optionalPhoneField() {
+  return z
+    .string()
+    .optional()
+    .refine((value) => !value || phoneDigits(value).length === 10, "Enter a valid 10-digit phone number.");
+}
+
 const zipRegex = /^\d{5}(-\d{4})?$/;
+const ssnRegex = /^\d{3}-\d{2}-\d{4}$/;
+
+function isRealCalendarDate(isoDate: string): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate);
+  if (!match) return false;
+  const [, yearStr, monthStr, dayStr] = match;
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+  const day = Number(dayStr);
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+}
 
 export const employmentLengthOptions = [
   "Less than 6 months",
@@ -30,17 +57,20 @@ export const propertyStepSchema = z.object({
 export const applicantInfoStepSchema = z.object({
   firstName: z.string().min(1, "First name is required."),
   lastName: z.string().min(1, "Last name is required."),
-  dateOfBirth: z.string().min(1, "Date of birth is required."),
-  phone: z.string().min(1, "Phone number is required.").regex(phoneRegex, "Enter a valid phone number."),
-  email: z.string().min(1, "Email is required.").email("Enter a valid email address."),
+  dateOfBirth: z
+    .string()
+    .min(1, "Date of birth is required.")
+    .refine(isRealCalendarDate, "Enter a valid date of birth."),
+  phone: phoneField("Primary phone"),
+  email: z.string().min(1, "Email address is required.").email("Enter a valid email address."),
   currentStreet: z.string().min(1, "Street address is required."),
   currentCity: z.string().min(1, "City is required."),
   currentState: z.string().min(2, "State is required.").max(2, "Use the 2-letter state code."),
   currentZip: z.string().min(1, "ZIP code is required.").regex(zipRegex, "Enter a valid ZIP code."),
-  ssnLast4: z
+  ssn: z
     .string()
-    .min(1, "Last 4 of SSN is required.")
-    .regex(/^\d{4}$/, "Enter the last 4 digits of your SSN."),
+    .min(1, "Social Security number is required.")
+    .regex(ssnRegex, "Enter a valid SSN as 000-00-0000."),
   driversLicenseNumber: z.string().optional(),
   driversLicenseState: z.string().optional(),
 });
@@ -52,7 +82,7 @@ export const employmentStepSchema = z.object({
     message: "Select how long you've worked there.",
   }),
   monthlyIncome: z.coerce.number({ message: "Enter your gross monthly income." }).positive("Enter a valid amount."),
-  employerPhone: z.string().min(1, "Employer phone is required.").regex(phoneRegex, "Enter a valid phone number."),
+  employerPhone: optionalPhoneField(),
   additionalIncomeSource: z.string().optional(),
   additionalIncomeAmount: z.coerce.number().nonnegative().optional().or(z.literal(undefined)),
 });
@@ -63,19 +93,19 @@ export const residenceHistoryStepSchema = z.object({
   }),
   residenceType: z.enum(residenceTypeOptions, { message: "Select an option." }),
   landlordName: z.string().optional(),
-  landlordPhone: z.string().optional(),
+  landlordPhone: optionalPhoneField(),
   reasonForLeaving: z.string().optional(),
 });
 
 export const occupantSchema = z.object({
   name: z.string().min(1, "Name is required."),
   relationship: z.string().min(1, "Relationship is required."),
-  age: z.coerce.number().positive("Enter a valid age."),
+  age: z.coerce.number().int("Enter a whole number.").min(0, "Enter a valid age.").max(120, "Enter a valid age."),
 });
 
 export const petSchema = z.object({
   type: z.string().min(1, "Pet type is required."),
-  breed: z.string().optional(),
+  breed: z.string().min(1, "Breed is required."),
   weight: z.string().optional(),
 });
 
@@ -88,6 +118,7 @@ export const vehicleSchema = z.object({
 
 export const householdStepSchema = z.object({
   occupants: z.array(occupantSchema),
+  otherAdultApplicants: z.string().optional(),
   pets: z.array(petSchema),
   vehicles: z.array(vehicleSchema),
 });
@@ -95,17 +126,14 @@ export const householdStepSchema = z.object({
 export const referenceSchema = z.object({
   name: z.string().min(1, "Name is required."),
   relationship: z.string().min(1, "Relationship is required."),
-  phone: z.string().min(1, "Phone number is required.").regex(phoneRegex, "Enter a valid phone number."),
+  phone: phoneField("Phone number"),
 });
 
 export const referencesStepSchema = z.object({
   references: z.array(referenceSchema).min(1, "Add at least one reference."),
   emergencyContactName: z.string().min(1, "Emergency contact name is required."),
   emergencyContactRelationship: z.string().min(1, "Relationship is required."),
-  emergencyContactPhone: z
-    .string()
-    .min(1, "Emergency contact phone is required.")
-    .regex(phoneRegex, "Enter a valid phone number."),
+  emergencyContactPhone: phoneField("Emergency contact phone"),
 });
 
 export const purchaseDetailsStepSchema = z.object({
@@ -118,7 +146,7 @@ export const purchaseDetailsStepSchema = z.object({
 export const reviewStepSchema = z.object({
   certifyTrue: z.literal(true, { message: "You must certify the information is accurate." }),
   authorizeBackgroundCheck: z.literal(true, { message: "Authorization is required to proceed." }),
-  consentEmailDelivery: z.literal(true, { message: "Consent is required to proceed." }),
+  consentBackgroundCheckSharing: z.literal(true, { message: "Consent is required to proceed." }),
   signatureFullName: z.string().min(1, "Type your full legal name to sign."),
 });
 

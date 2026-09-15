@@ -1,12 +1,15 @@
 import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
+import { SESClient, SendRawEmailCommand } from "@aws-sdk/client-ses";
 import { randomUUID } from "crypto";
+import * as nodemailer from "nodemailer";
 import { submitApplicationSchema } from "./schema";
+import { generateApplicationPdf } from "./generatePdf";
+import { formatPropertyAddress } from "./propertyAddresses";
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
-const ses = new SESv2Client({});
+const ses = new SESClient({});
 
 const TABLE_NAME = process.env.TABLE_NAME!;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL!;
@@ -50,68 +53,43 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     })
   );
 
-  const addressSummary = `Property ID: ${values.propertyId}`;
+  const propertyAddress = formatPropertyAddress(values.propertyId);
   const label = applicationTypeLabel(values.applicationType);
 
-  const adminEmail = ses.send(
-    new SendEmailCommand({
-      FromEmailAddress: FROM_EMAIL,
-      Destination: { ToAddresses: [ADMIN_EMAIL] },
-      Content: {
-        Simple: {
-          Subject: { Data: `New ${label} — ${values.firstName} ${values.lastName}` },
-          Body: {
-            Text: {
-              Data: [
-                `A new ${label.toLowerCase()} was submitted.`,
-                "",
-                addressSummary,
-                `Applicant: ${values.firstName} ${values.lastName}`,
-                `Phone: ${values.phone}`,
-                `Email: ${values.email}`,
-                `Monthly income: $${values.monthlyIncome}`,
-                "",
-                `Application ID: ${applicationId}`,
-                `Submitted: ${submittedAt}`,
-              ].join("\n"),
-            },
-          },
-        },
-      },
-    })
-  );
-
-  const applicantEmail = ses.send(
-    new SendEmailCommand({
-      FromEmailAddress: FROM_EMAIL,
-      Destination: { ToAddresses: [values.email] },
-      Content: {
-        Simple: {
-          Subject: { Data: "We received your JustHomes application" },
-          Body: {
-            Text: {
-              Data: [
-                `Hi ${values.firstName},`,
-                "",
-                `Thanks for submitting your ${label.toLowerCase()} with JustHomes. We've received it and will be in touch soon.`,
-                "",
-                `Application ID: ${applicationId}`,
-                `Submitted: ${submittedAt}`,
-                "",
-                "If you have questions in the meantime, just reply to this email.",
-              ].join("\n"),
-            },
-          },
-        },
-      },
-    })
-  );
-
   try {
-    await Promise.all([adminEmail, applicantEmail]);
+    const pdfBuffer = await generateApplicationPdf(values, propertyAddress, applicationId, submittedAt);
+
+    const mail = await nodemailer.createTransport({ streamTransport: true, buffer: true }).sendMail({
+      from: FROM_EMAIL,
+      to: ADMIN_EMAIL,
+      subject: `New ${label} — ${values.firstName} ${values.lastName}`,
+      text: [
+        `A new ${label.toLowerCase()} was submitted.`,
+        "",
+        propertyAddress,
+        `Applicant: ${values.firstName} ${values.lastName}`,
+        `Phone: ${values.phone}`,
+        `Email: ${values.email}`,
+        `Monthly income: $${values.monthlyIncome}`,
+        "",
+        `Application ID: ${applicationId}`,
+        `Submitted: ${submittedAt}`,
+        "",
+        "The full application is attached as a PDF.",
+      ].join("\n"),
+      attachments: [
+        {
+          filename: `justhomes-application-${applicationId}.pdf`,
+          content: pdfBuffer,
+          contentType: "application/pdf",
+        },
+      ],
+    });
+
+    await ses.send(new SendRawEmailCommand({ RawMessage: { Data: mail.message as Buffer } }));
   } catch (error) {
     // The application is already saved — email delivery failing shouldn't fail the submission.
-    console.error("Failed to send one or more confirmation emails", error);
+    console.error("Failed to generate or send the application PDF email", error);
   }
 
   return jsonResponse(201, { applicationId, submittedAt });

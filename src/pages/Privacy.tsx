@@ -11,9 +11,10 @@ function Privacy() {
         <h2>What we collect</h2>
         <p>
           When you submit a rental or rent-to-own application through this site, we collect the information you
-          provide directly, including your name, date of birth, contact information, current address, the last
-          four digits of your Social Security number, employment and income details, residence history, household
-          members, references, and any documents you choose to upload (such as a photo ID or proof of income).
+          provide directly, including your name, date of birth, primary phone number, email address, current
+          address, Social Security number, employment and income details, residence history, intended occupants,
+          references, and any documents you choose to upload (such as a photo ID or proof of income). Every
+          applicant aged 18 or older who intends to live in the home must submit their own application.
         </p>
       </section>
 
@@ -40,9 +41,21 @@ function Privacy() {
       <section>
         <h2>Who we share it with</h2>
         <p>
-          We share application information with third parties only as needed to process your application — for
-          example, a background or credit screening provider, if you've consented to that check — or where
-          required by law. We do not sell or rent your personal information.
+          We use a third-party company, TenetBackgroundSearch.com, to perform background checks as part of
+          processing your application. We only share your name and email address with them, used to confirm
+          your identity — we do not send them your full application. Beyond this, we share application
+          information with third parties only as needed to process your application, or where required by
+          law. We do not sell or rent your personal information.
+        </p>
+      </section>
+
+      <section>
+        <h2>Application and background check fees</h2>
+        <p>
+          Every applicant aged 18 or older who intends to live in the home or apartment must submit a
+          separate application and undergo a background check. You will receive an invoice directly from our
+          background check provider for this service. Pricing may vary, but typically costs about $28 per
+          adult applicant.
         </p>
       </section>
 
@@ -56,6 +69,20 @@ function Privacy() {
             david@justhomes.us
           </a>
           .
+        </p>
+      </section>
+
+      <section>
+        <h2>Debt Relief Agency Disclaimer</h2>
+        <p>
+          We are not a debt relief agency and we do not help people file for bankruptcy relief under the
+          Bankruptcy Code. We do not provide bankruptcy information, advice, debt relief service,
+          counseling, document preparation, bankruptcy filing, or legal representation related to an
+          existing or prospective bankruptcy. If you want bankruptcy advice please consult an attorney. If
+          you want debt relief service please consult a debt relief agency. Any written or oral statements
+          we may give to you about bankruptcy or debt relief service are our opinions only. We are not
+          lawyers or a debt relief agency, nor do we help people with bankruptcy filings and cannot give you
+          competent legal advice about bankruptcy.
         </p>
       </section>
 

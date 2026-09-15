@@ -24,6 +24,11 @@ function ApplyHub() {
           Choose the path that fits what you're looking for. Every step is completed
           online — no printing, no office visit.
         </p>
+        <p className="apply-hub__notice">
+          <strong>Every adult aged 18 or older</strong> who intends to live in the home or apartment must
+          submit their own separate application, listing the names and ages of everyone they intend to live
+          with.
+        </p>
       </div>
 
       <div className="apply-hub__paths">
@@ -53,9 +58,7 @@ function ApplyHub() {
       {myApplications.length > 0 && (
         <div className="apply-hub__my-applications">
           <h2>My Submitted Applications</h2>
-          <p className="apply-hub__my-applications-note">
-            Shown here for quick reference on this device. A copy was also emailed to you.
-          </p>
+          <p className="apply-hub__my-applications-note">Shown here for quick reference on this device.</p>
           <ul>
             {myApplications.map((application) => {
               const property = getPropertyById(application.values.propertyId);

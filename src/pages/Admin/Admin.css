@@ -80,3 +80,18 @@
   font-weight: 600;
   text-decoration: none;
 }
+
+.admin-inline-toggle {
+  background: transparent;
+  border: none;
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--space-2);
+}
+
+.admin-inline-toggle:hover {
+  text-decoration: underline;
+}
