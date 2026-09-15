@@ -79,16 +79,24 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
             <dd>{values.occupants?.length ?? 0}</dd>
           </dl>
           <dl className="review-summary__row">
-            <dt>Other adult applicants</dt>
-            <dd>{values.otherAdultApplicants || "None listed"}</dd>
-          </dl>
-          <dl className="review-summary__row">
             <dt>Pets</dt>
             <dd>{values.pets?.length ?? 0}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Vehicles</dt>
             <dd>{values.vehicles?.length ?? 0}</dd>
+          </dl>
+        </div>
+
+        <div className="review-summary__section">
+          <h3>Background questions</h3>
+          <dl className="review-summary__row">
+            <dt>Ever evicted?</dt>
+            <dd>{values.everEvicted}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Ever convicted of a crime?</dt>
+            <dd>{values.everConvicted}</dd>
           </dl>
         </div>
 
@@ -106,10 +114,6 @@ function ReviewStep({ applicationType, documentCount }: ReviewStepProps) {
             <dl className="review-summary__row">
               <dt>Estimated down payment</dt>
               <dd>${values.desiredDownPayment}</dd>
-            </dl>
-            <dl className="review-summary__row">
-              <dt>Timeline</dt>
-              <dd>{values.purchaseTimeline}</dd>
             </dl>
           </div>
         )}

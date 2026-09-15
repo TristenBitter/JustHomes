@@ -5,7 +5,7 @@ const baseApplicant = {
   firstName: "Jane",
   lastName: "Doe",
   dateOfBirth: "1990-01-01",
-  phone: "480-555-1234",
+  phone: "(480) 555-1234",
   email: "jane@example.com",
   currentStreet: "123 Test St",
   currentCity: "Phoenix",
@@ -18,13 +18,15 @@ const baseApplicant = {
   monthlyIncome: 5000,
   currentAddressDuration: "2 - 5 years",
   residenceType: "Rent",
+  everEvicted: "No" as const,
+  everConvicted: "No" as const,
   occupants: [],
   pets: [],
   vehicles: [],
-  references: [{ name: "John Smith", relationship: "Friend", phone: "480-555-0000" }],
+  references: [{ name: "John Smith", relationship: "Friend", phone: "(480) 555-0000" }],
   emergencyContactName: "Mary Doe",
   emergencyContactRelationship: "Sister",
-  emergencyContactPhone: "480-555-1111",
+  emergencyContactPhone: "(480) 555-1111",
   certifyTrue: true as const,
   authorizeBackgroundCheck: true as const,
   consentBackgroundCheckSharing: true as const,
@@ -52,12 +54,20 @@ describe("apartmentApplicationSchema", () => {
     expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, ssn: "123-45-678" }).success).toBe(false);
   });
 
+  it("rejects an incomplete SSN", () => {
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, ssn: "123" }).success).toBe(false);
+  });
+
   it("rejects a phone number that isn't 10 digits", () => {
-    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, phone: "480-555-12" }).success).toBe(false);
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, phone: "(480) 555-12" }).success).toBe(false);
+  });
+
+  it("accepts a phone number formatted with parentheses and a dash", () => {
+    expect(apartmentApplicationSchema.safeParse({ ...baseApplicant, phone: "(480) 555-1234" }).success).toBe(true);
   });
 
   it("accepts an optional employer phone when it is a valid 10-digit number", () => {
-    const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, employerPhone: "480-555-9999" });
+    const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, employerPhone: "(480) 555-9999" });
     expect(result.success).toBe(true);
   });
 
@@ -70,6 +80,18 @@ describe("apartmentApplicationSchema", () => {
   it("rejects an unchecked required consent checkbox", () => {
     const result = apartmentApplicationSchema.safeParse({ ...baseApplicant, certifyTrue: false });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects a missing answer to the eviction question", () => {
+    const { everEvicted, ...withoutEviction } = baseApplicant;
+    void everEvicted;
+    expect(apartmentApplicationSchema.safeParse(withoutEviction).success).toBe(false);
+  });
+
+  it("rejects a missing answer to the conviction question", () => {
+    const { everConvicted, ...withoutConviction } = baseApplicant;
+    void everConvicted;
+    expect(apartmentApplicationSchema.safeParse(withoutConviction).success).toBe(false);
   });
 
   it("rejects an application with zero references", () => {
@@ -105,22 +127,12 @@ describe("apartmentApplicationSchema", () => {
     });
     expect(result.success).toBe(false);
   });
-
-  it("accepts an application listing other adult applicants", () => {
-    const result = apartmentApplicationSchema.safeParse({
-      ...baseApplicant,
-      occupants: [{ name: "John Doe", relationship: "Spouse", age: 32 }],
-      otherAdultApplicants: "John Doe",
-    });
-    expect(result.success).toBe(true);
-  });
 });
 
 describe("rentToOwnApplicationSchema", () => {
   const rentToOwnApplicant = {
     ...baseApplicant,
     desiredDownPayment: 10000,
-    purchaseTimeline: "1 - 3 months",
     creditCheckConsent: true as const,
   };
 
@@ -128,14 +140,14 @@ describe("rentToOwnApplicationSchema", () => {
     expect(rentToOwnApplicationSchema.safeParse(rentToOwnApplicant).success).toBe(true);
   });
 
-  it("rejects a missing purchase timeline", () => {
-    const { purchaseTimeline, ...withoutTimeline } = rentToOwnApplicant;
-    void purchaseTimeline;
-    expect(rentToOwnApplicationSchema.safeParse(withoutTimeline).success).toBe(false);
-  });
-
   it("rejects declined credit check consent", () => {
     const result = rentToOwnApplicationSchema.safeParse({ ...rentToOwnApplicant, creditCheckConsent: false });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects a missing credit check consent", () => {
+    const { creditCheckConsent, ...withoutConsent } = rentToOwnApplicant;
+    void creditCheckConsent;
+    expect(rentToOwnApplicationSchema.safeParse(withoutConsent).success).toBe(false);
   });
 });

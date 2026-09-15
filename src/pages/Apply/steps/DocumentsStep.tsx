@@ -1,17 +1,21 @@
 import { useRef, useState } from "react";
 import { uploadDocument, type UploadedDocument } from "../../../services/uploads";
+import type { ApplicationType } from "../../../types/application";
 import "./steps.css";
 
 interface DocumentsStepProps {
+  applicationType: ApplicationType;
   documents: UploadedDocument[];
   onAdd: (document: UploadedDocument) => void;
   onRemove: (key: string) => void;
+  showRequiredError?: boolean;
 }
 
-function DocumentsStep({ documents, onAdd, onRemove }: DocumentsStepProps) {
+function DocumentsStep({ applicationType, documents, onAdd, onRemove, showRequiredError }: DocumentsStepProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isRentToOwn = applicationType === "rent-to-own";
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -33,10 +37,11 @@ function DocumentsStep({ documents, onAdd, onRemove }: DocumentsStepProps) {
 
   return (
     <div className="app-step">
-      <h2>Supporting documents</h2>
+      <h2>{isRentToOwn ? "Photo ID" : "Supporting documents"}</h2>
       <p className="app-step__description">
-        Optional for now — attach a photo ID or proof of income if you have them handy. You can also send these
-        later if it's easier.
+        {isRentToOwn
+          ? "A state-issued photo ID (driver's license or other government-issued ID) is required for rent-to-own applications."
+          : "Optional — attach a photo ID or proof of income if you have them handy. You can also send these later if it's easier."}
       </p>
 
       {documents.length === 0 && <p className="app-step__empty-note">No documents attached yet.</p>}
@@ -66,6 +71,11 @@ function DocumentsStep({ documents, onAdd, onRemove }: DocumentsStepProps) {
       {error && (
         <p className="form-field__error" role="alert">
           {error}
+        </p>
+      )}
+      {showRequiredError && documents.length === 0 && (
+        <p className="form-field__error" role="alert">
+          A photo ID upload is required to continue with a rent-to-own application.
         </p>
       )}
     </div>

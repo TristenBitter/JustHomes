@@ -1,7 +1,8 @@
 import { useFormContext } from "react-hook-form";
-import type { ApplicationFormValues } from "../../../types/application";
+import type { ApplicationFormValues, ApplicationType } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
 import DateOfBirthField from "../../../components/application/DateOfBirthField";
+import PhoneInput from "../../../components/application/PhoneInput";
 import "./steps.css";
 
 function formatSsn(value: string): string {
@@ -11,7 +12,11 @@ function formatSsn(value: string): string {
   return digits;
 }
 
-function ApplicantInfoStep() {
+interface ApplicantInfoStepProps {
+  applicationType: ApplicationType;
+}
+
+function ApplicantInfoStep({ applicationType }: ApplicantInfoStepProps) {
   const {
     register,
     formState: { errors },
@@ -52,7 +57,7 @@ function ApplicantInfoStep() {
 
       <div className="form-row">
         <FormField label="Primary Phone" htmlFor="phone" required error={errors.phone?.message}>
-          <input id="phone" type="tel" className="form-input" {...register("phone")} />
+          <PhoneInput id="phone" registration={register("phone")} />
         </FormField>
         <FormField label="Email Address" htmlFor="email" required error={errors.email?.message}>
           <input id="email" type="email" className="form-input" {...register("email")} />
@@ -75,14 +80,24 @@ function ApplicantInfoStep() {
         </FormField>
       </div>
 
-      <div className="form-row">
-        <FormField label="Driver's license number" htmlFor="driversLicenseNumber" error={errors.driversLicenseNumber?.message}>
-          <input id="driversLicenseNumber" className="form-input" {...register("driversLicenseNumber")} />
-        </FormField>
-        <FormField label="Driver's license state" htmlFor="driversLicenseState" error={errors.driversLicenseState?.message}>
-          <input id="driversLicenseState" className="form-input" maxLength={2} {...register("driversLicenseState")} />
-        </FormField>
-      </div>
+      {applicationType === "apartment" && (
+        <div className="form-row">
+          <FormField
+            label="Driver's license number (optional)"
+            htmlFor="driversLicenseNumber"
+            error={errors.driversLicenseNumber?.message}
+          >
+            <input id="driversLicenseNumber" className="form-input" {...register("driversLicenseNumber")} />
+          </FormField>
+          <FormField
+            label="Driver's license state (optional)"
+            htmlFor="driversLicenseState"
+            error={errors.driversLicenseState?.message}
+          >
+            <input id="driversLicenseState" className="form-input" maxLength={2} {...register("driversLicenseState")} />
+          </FormField>
+        </div>
+      )}
     </div>
   );
 }

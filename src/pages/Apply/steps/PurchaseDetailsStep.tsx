@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { purchaseTimelineOptions, type ApplicationFormValues } from "../../../types/application";
+import type { ApplicationFormValues } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
 import "./steps.css";
 
@@ -30,25 +30,14 @@ function PurchaseDetailsStep() {
             {...register("desiredDownPayment")}
           />
         </FormField>
-        <FormField label="Purchase timeline" htmlFor="purchaseTimeline" required error={errors.purchaseTimeline?.message}>
-          <select id="purchaseTimeline" className="form-select" {...register("purchaseTimeline")}>
-            <option value="">Select…</option>
-            {purchaseTimelineOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+        <FormField
+          label="Estimated credit range (optional)"
+          htmlFor="estimatedCreditRange"
+          error={errors.estimatedCreditRange?.message}
+        >
+          <input id="estimatedCreditRange" className="form-input" placeholder="e.g. 650–700" {...register("estimatedCreditRange")} />
         </FormField>
       </div>
-
-      <FormField
-        label="Estimated credit range (optional)"
-        htmlFor="estimatedCreditRange"
-        error={errors.estimatedCreditRange?.message}
-      >
-        <input id="estimatedCreditRange" className="form-input" placeholder="e.g. 650–700" {...register("estimatedCreditRange")} />
-      </FormField>
 
       <div className="checkbox-field">
         <input id="creditCheckConsent" type="checkbox" {...register("creditCheckConsent")} />

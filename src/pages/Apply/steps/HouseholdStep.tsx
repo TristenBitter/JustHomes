@@ -39,8 +39,7 @@ function HouseholdStep() {
       </p>
       <p className="app-step__notice">
         Every occupant aged 18 or older must submit their own separate application. List them below with
-        their age, and name them again in "Other adult applicants" so we can match up your household's
-        applications.
+        their age.
       </p>
 
       <h3>Intended occupants</h3>
@@ -102,20 +101,6 @@ function HouseholdStep() {
         + Add occupant
       </button>
 
-      <FormField
-        label="Other adult applicants (18+)"
-        htmlFor="otherAdultApplicants"
-        hint="Names of other adults who will also be living here and submitting their own application."
-        error={errors.otherAdultApplicants?.message}
-      >
-        <textarea
-          id="otherAdultApplicants"
-          className="form-textarea"
-          placeholder="e.g. John Doe, Maria Doe"
-          {...register("otherAdultApplicants")}
-        />
-      </FormField>
-
       <h3>Pets</h3>
       {pets.fields.length === 0 && <p className="app-step__empty-note">No pets added.</p>}
       {pets.fields.map((field, index) => (
@@ -140,8 +125,18 @@ function HouseholdStep() {
             >
               <input id={`pets.${index}.breed`} className="form-input" {...register(`pets.${index}.breed`)} />
             </FormField>
-            <FormField label="Weight" htmlFor={`pets.${index}.weight`} error={errors.pets?.[index]?.weight?.message}>
-              <input id={`pets.${index}.weight`} className="form-input" {...register(`pets.${index}.weight`)} />
+            <FormField
+              label="Weight (lbs)"
+              htmlFor={`pets.${index}.weight`}
+              error={errors.pets?.[index]?.weight?.message}
+            >
+              <input
+                id={`pets.${index}.weight`}
+                className="form-input"
+                inputMode="numeric"
+                placeholder="e.g. 45"
+                {...register(`pets.${index}.weight`)}
+              />
             </FormField>
           </div>
         </div>

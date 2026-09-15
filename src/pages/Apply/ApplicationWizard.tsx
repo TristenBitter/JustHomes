@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FormProvider, useForm, type Resolver } from "react-hook-form";
+import { FormProvider, useForm, type FieldErrors, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   apartmentApplicationSchema,
@@ -34,14 +34,19 @@ interface StepConfig {
   render: () => React.ReactNode;
 }
 
+const DOCUMENTS_STEP_LABEL = "Documents";
+
 function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
   const [stepIndex, setStepIndex] = useState(0);
   const [submitted, setSubmitted] = useState<SubmittedApplication | null>(null);
   const [documents, setDocuments] = useState<UploadedDocument[]>([]);
+  const [documentsRequiredError, setDocumentsRequiredError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [validationBanner, setValidationBanner] = useState<string | null>(null);
 
   const schema = applicationType === "apartment" ? apartmentApplicationSchema : rentToOwnApplicationSchema;
+  const requiresPhotoId = applicationType === "rent-to-own";
 
   const methods = useForm<ApplicationFormValues>({
     resolver: zodResolver(schema) as Resolver<ApplicationFormValues>,
@@ -80,7 +85,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
           "currentZip",
           "ssn",
         ],
-        render: () => <ApplicantInfoStep />,
+        render: () => <ApplicantInfoStep applicationType={applicationType} />,
       },
       {
         label: "Employment",
@@ -89,7 +94,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
       },
       {
         label: "Residence",
-        fields: ["currentAddressDuration", "residenceType"],
+        fields: ["currentAddressDuration", "residenceType", "everEvicted", "everConvicted"],
         render: () => <ResidenceHistoryStep />,
       },
       { label: "Household", fields: ["occupants", "pets", "vehicles"], render: () => <HouseholdStep /> },
@@ -99,12 +104,17 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
         render: () => <ReferencesStep />,
       },
       {
-        label: "Documents",
+        label: DOCUMENTS_STEP_LABEL,
         fields: [],
         render: () => (
           <DocumentsStep
+            applicationType={applicationType}
             documents={documents}
-            onAdd={(doc) => setDocuments((docs) => [...docs, doc])}
+            showRequiredError={documentsRequiredError}
+            onAdd={(doc) => {
+              setDocuments((docs) => [...docs, doc]);
+              setDocumentsRequiredError(false);
+            }}
             onRemove={(key) => setDocuments((docs) => docs.filter((doc) => doc.key !== key))}
           />
         ),
@@ -114,7 +124,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     if (applicationType === "rent-to-own") {
       base.push({
         label: "Purchase",
-        fields: ["desiredDownPayment", "purchaseTimeline", "creditCheckConsent"],
+        fields: ["desiredDownPayment", "creditCheckConsent"],
         render: () => <PurchaseDetailsStep />,
       });
     }
@@ -126,25 +136,53 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     });
 
     return base;
-  }, [applicationType, documents]);
+  }, [applicationType, documents, documentsRequiredError]);
 
   const isLastStep = stepIndex === steps.length - 1;
   const currentStep = steps[stepIndex];
 
   const handleNext = async () => {
     const valid = await methods.trigger(currentStep.fields as (keyof ApplicationFormValues)[]);
-    if (valid) {
-      setStepIndex((index) => Math.min(index + 1, steps.length - 1));
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!valid) return;
+
+    if (currentStep.label === DOCUMENTS_STEP_LABEL && requiresPhotoId && documents.length === 0) {
+      setDocumentsRequiredError(true);
+      return;
     }
+
+    setValidationBanner(null);
+    setStepIndex((index) => Math.min(index + 1, steps.length - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleBack = () => {
+    setValidationBanner(null);
     setStepIndex((index) => Math.max(index - 1, 0));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const jumpToFirstErrorStep = (errors: FieldErrors<ApplicationFormValues>) => {
+    const erroredFieldNames = Object.keys(errors);
+    const targetIndex = steps.findIndex((step) => step.fields.some((field) => erroredFieldNames.includes(field)));
+
+    if (targetIndex !== -1 && targetIndex !== stepIndex) {
+      setStepIndex(targetIndex);
+      setValidationBanner("Please complete the required fields highlighted on this step, then continue.");
+    } else {
+      setValidationBanner("Please complete all required fields and checkboxes below before submitting.");
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const onSubmit = methods.handleSubmit(async (values) => {
+    if (requiresPhotoId && documents.length === 0) {
+      const docStepIndex = steps.findIndex((step) => step.label === DOCUMENTS_STEP_LABEL);
+      setStepIndex(docStepIndex);
+      setDocumentsRequiredError(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError(null);
     try {
@@ -160,7 +198,7 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
     } finally {
       setSubmitting(false);
     }
-  });
+  }, jumpToFirstErrorStep);
 
   if (submitted) {
     return <Confirmation application={submitted} />;
@@ -182,6 +220,12 @@ function ApplicationWizard({ applicationType }: ApplicationWizardProps) {
             }
           }}
         >
+          {validationBanner && (
+            <p className="form-field__error" role="alert">
+              {validationBanner}
+            </p>
+          )}
+
           {currentStep.render()}
 
           {submitError && (

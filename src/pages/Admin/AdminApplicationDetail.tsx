@@ -73,10 +73,12 @@ function AdminApplicationDetail() {
         <div className="review-summary__section">
           <h3>Applicant</h3>
           <dl className="review-summary__row">
-            <dt>Contact</dt>
-            <dd>
-              {values.phone} · {values.email}
-            </dd>
+            <dt>Primary Phone</dt>
+            <dd>{values.phone}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Email Address</dt>
+            <dd>{values.email}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Date of birth</dt>
@@ -88,6 +90,14 @@ function AdminApplicationDetail() {
               {values.currentStreet}, {values.currentCity}, {values.currentState} {values.currentZip}
             </dd>
           </dl>
+          {values.driversLicenseNumber && (
+            <dl className="review-summary__row">
+              <dt>Driver's license</dt>
+              <dd>
+                {values.driversLicenseNumber} ({values.driversLicenseState ?? "—"})
+              </dd>
+            </dl>
+          )}
           <dl className="review-summary__row">
             <dt>Social Security Number</dt>
             <dd>
@@ -144,16 +154,24 @@ function AdminApplicationDetail() {
             <dd>{values.occupants?.map((o) => `${o.name} (${o.relationship}, age ${o.age})`).join(", ") || "None"}</dd>
           </dl>
           <dl className="review-summary__row">
-            <dt>Other adult applicants</dt>
-            <dd>{values.otherAdultApplicants || "None listed"}</dd>
-          </dl>
-          <dl className="review-summary__row">
             <dt>Pets</dt>
-            <dd>{values.pets?.map((p) => `${p.type} (${p.breed})`).join(", ") || "None"}</dd>
+            <dd>{values.pets?.map((p) => `${p.type} (${p.breed}${p.weight ? `, ${p.weight} lbs` : ""})`).join(", ") || "None"}</dd>
           </dl>
           <dl className="review-summary__row">
             <dt>Vehicles</dt>
             <dd>{values.vehicles?.map((v) => `${v.make} ${v.model}`).join(", ") || "None"}</dd>
+          </dl>
+        </div>
+
+        <div className="review-summary__section">
+          <h3>Background questions</h3>
+          <dl className="review-summary__row">
+            <dt>Ever evicted?</dt>
+            <dd>{values.everEvicted}</dd>
+          </dl>
+          <dl className="review-summary__row">
+            <dt>Ever convicted of a crime?</dt>
+            <dd>{values.everConvicted}</dd>
           </dl>
         </div>
 
@@ -182,10 +200,6 @@ function AdminApplicationDetail() {
             <dl className="review-summary__row">
               <dt>Estimated down payment</dt>
               <dd>${values.desiredDownPayment}</dd>
-            </dl>
-            <dl className="review-summary__row">
-              <dt>Timeline</dt>
-              <dd>{values.purchaseTimeline}</dd>
             </dl>
           </div>
         )}

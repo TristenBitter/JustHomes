@@ -36,6 +36,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   const values = parsed.data;
+
+  if (values.applicationType === "rent-to-own" && (!values.documents || values.documents.length === 0)) {
+    return jsonResponse(400, {
+      message: "A state-issued photo ID upload is required for rent-to-own applications.",
+    });
+  }
   const applicationId = randomUUID();
   const submittedAt = new Date().toISOString();
 

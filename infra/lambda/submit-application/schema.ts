@@ -42,10 +42,11 @@ export const submitApplicationSchema = z.object({
   landlordName: z.string().optional(),
   landlordPhone: optionalPhoneField(),
   reasonForLeaving: z.string().optional(),
+  everEvicted: z.enum(["Yes", "No"]),
+  everConvicted: z.enum(["Yes", "No"]),
   occupants: z.array(
     z.object({ name: z.string().min(1), relationship: z.string().min(1), age: z.coerce.number() })
   ),
-  otherAdultApplicants: z.string().optional(),
   pets: z.array(z.object({ type: z.string().min(1), breed: z.string().min(1), weight: z.string().optional() })),
   vehicles: z.array(
     z.object({
@@ -62,7 +63,6 @@ export const submitApplicationSchema = z.object({
   emergencyContactRelationship: z.string().min(1),
   emergencyContactPhone: phoneField(),
   desiredDownPayment: z.coerce.number().optional(),
-  purchaseTimeline: z.string().optional(),
   creditCheckConsent: z.boolean().optional(),
   estimatedCreditRange: z.string().optional(),
   certifyTrue: z.literal(true),

@@ -5,6 +5,7 @@ import {
   type ApplicationFormValues,
 } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
+import PhoneInput from "../../../components/application/PhoneInput";
 import "./steps.css";
 
 function ResidenceHistoryStep() {
@@ -51,12 +52,50 @@ function ResidenceHistoryStep() {
           <input id="landlordName" className="form-input" {...register("landlordName")} />
         </FormField>
         <FormField label="Landlord phone (if renting)" htmlFor="landlordPhone" error={errors.landlordPhone?.message}>
-          <input id="landlordPhone" type="tel" className="form-input" {...register("landlordPhone")} />
+          <PhoneInput id="landlordPhone" registration={register("landlordPhone")} />
         </FormField>
       </div>
 
       <FormField label="Reason for leaving (optional)" htmlFor="reasonForLeaving" error={errors.reasonForLeaving?.message}>
         <textarea id="reasonForLeaving" className="form-textarea" {...register("reasonForLeaving")} />
+      </FormField>
+
+      <h3>Background questions</h3>
+
+      <FormField
+        label="Have you ever been evicted from an apartment or residence?"
+        htmlFor="everEvicted"
+        required
+        error={errors.everEvicted?.message}
+      >
+        <div className="radio-row">
+          <label className="radio-option">
+            <input type="radio" value="Yes" {...register("everEvicted")} />
+            Yes
+          </label>
+          <label className="radio-option">
+            <input type="radio" value="No" {...register("everEvicted")} />
+            No
+          </label>
+        </div>
+      </FormField>
+
+      <FormField
+        label="Have you ever been convicted of a crime?"
+        htmlFor="everConvicted"
+        required
+        error={errors.everConvicted?.message}
+      >
+        <div className="radio-row">
+          <label className="radio-option">
+            <input type="radio" value="Yes" {...register("everConvicted")} />
+            Yes
+          </label>
+          <label className="radio-option">
+            <input type="radio" value="No" {...register("everConvicted")} />
+            No
+          </label>
+        </div>
       </FormField>
     </div>
   );

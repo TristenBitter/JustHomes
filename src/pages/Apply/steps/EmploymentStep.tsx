@@ -1,6 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { employmentLengthOptions, type ApplicationFormValues } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
+import PhoneInput from "../../../components/application/PhoneInput";
 import "./steps.css";
 
 function EmploymentStep() {
@@ -40,7 +41,7 @@ function EmploymentStep() {
           hint="Helpful for verifying employment, but not required to submit."
           error={errors.employerPhone?.message}
         >
-          <input id="employerPhone" type="tel" className="form-input" {...register("employerPhone")} />
+          <PhoneInput id="employerPhone" registration={register("employerPhone")} />
         </FormField>
       </div>
 

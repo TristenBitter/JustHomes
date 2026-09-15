@@ -42,13 +42,7 @@ export const employmentLengthOptions = [
 
 export const residenceTypeOptions = ["Rent", "Own", "Living with family", "Other"] as const;
 
-export const purchaseTimelineOptions = [
-  "Immediately",
-  "1 - 3 months",
-  "3 - 6 months",
-  "6 - 12 months",
-  "12+ months",
-] as const;
+export const yesNoOptions = ["Yes", "No"] as const;
 
 export const propertyStepSchema = z.object({
   propertyOfInterest: z.string().optional(),
@@ -95,6 +89,8 @@ export const residenceHistoryStepSchema = z.object({
   landlordName: z.string().optional(),
   landlordPhone: optionalPhoneField(),
   reasonForLeaving: z.string().optional(),
+  everEvicted: z.enum(yesNoOptions, { message: "Please answer this question." }),
+  everConvicted: z.enum(yesNoOptions, { message: "Please answer this question." }),
 });
 
 export const occupantSchema = z.object({
@@ -118,7 +114,6 @@ export const vehicleSchema = z.object({
 
 export const householdStepSchema = z.object({
   occupants: z.array(occupantSchema),
-  otherAdultApplicants: z.string().optional(),
   pets: z.array(petSchema),
   vehicles: z.array(vehicleSchema),
 });
@@ -138,7 +133,6 @@ export const referencesStepSchema = z.object({
 
 export const purchaseDetailsStepSchema = z.object({
   desiredDownPayment: z.coerce.number({ message: "Enter your estimated down payment." }).positive("Enter a valid amount."),
-  purchaseTimeline: z.enum(purchaseTimelineOptions, { message: "Select a timeline." }),
   creditCheckConsent: z.literal(true, { message: "Consent is required to proceed." }),
   estimatedCreditRange: z.string().optional(),
 });

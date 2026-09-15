@@ -27,7 +27,7 @@ function Contact() {
         <div className="contact-card">
           <h2>Call us</h2>
           <a className="contact-card__link" href="tel:+14804204881">
-            480-420-4881
+            (480) 420-4881
           </a>
         </div>
 

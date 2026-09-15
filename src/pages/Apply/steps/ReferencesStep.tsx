@@ -1,6 +1,7 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { ApplicationFormValues } from "../../../types/application";
 import FormField from "../../../components/application/FormField";
+import PhoneInput from "../../../components/application/PhoneInput";
 import "./steps.css";
 
 function ReferencesStep() {
@@ -62,12 +63,7 @@ function ReferencesStep() {
               required
               error={errors.references?.[index]?.phone?.message}
             >
-              <input
-                id={`references.${index}.phone`}
-                type="tel"
-                className="form-input"
-                {...register(`references.${index}.phone`)}
-              />
+              <PhoneInput id={`references.${index}.phone`} registration={register(`references.${index}.phone`)} />
             </FormField>
           </div>
         </div>
@@ -108,12 +104,7 @@ function ReferencesStep() {
           required
           error={errors.emergencyContactPhone?.message}
         >
-          <input
-            id="emergencyContactPhone"
-            type="tel"
-            className="form-input"
-            {...register("emergencyContactPhone")}
-          />
+          <PhoneInput id="emergencyContactPhone" registration={register("emergencyContactPhone")} />
         </FormField>
       </div>
     </div>

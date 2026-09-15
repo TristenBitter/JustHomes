@@ -21,6 +21,12 @@ function field(doc: PDFKit.PDFDocument, label: string, value: string | number | 
     .text(value === undefined || value === null || value === "" ? "—" : String(value));
 }
 
+function formatDateOfBirth(isoDate: string): string {
+  const [year, month, day] = isoDate.split("-");
+  if (!year || !month || !day) return isoDate;
+  return `${month}/${day}/${year}`;
+}
+
 export function generateApplicationPdf(
   input: SubmitApplicationInput,
   applicationId: string,
@@ -47,12 +53,14 @@ export function generateApplicationPdf(
 
     heading(doc, "Applicant");
     field(doc, "Name", `${input.firstName} ${input.lastName}`);
-    field(doc, "Date of birth", input.dateOfBirth);
+    field(doc, "Date of birth", formatDateOfBirth(input.dateOfBirth));
     field(doc, "Social Security Number", input.ssn);
     field(doc, "Primary Phone", input.phone);
     field(doc, "Email Address", input.email);
     field(doc, "Current address", `${input.currentStreet}, ${input.currentCity}, ${input.currentState} ${input.currentZip}`);
-    field(doc, "Driver's license", `${input.driversLicenseNumber ?? "—"} (${input.driversLicenseState ?? "—"})`);
+    if (input.driversLicenseNumber) {
+      field(doc, "Driver's license", `${input.driversLicenseNumber} (${input.driversLicenseState ?? "—"})`);
+    }
 
     heading(doc, "Employment & Income");
     field(doc, "Employer", input.employerName);
@@ -70,6 +78,10 @@ export function generateApplicationPdf(
     field(doc, "Landlord", `${input.landlordName ?? "—"} (${input.landlordPhone ?? "—"})`);
     field(doc, "Reason for leaving", input.reasonForLeaving);
 
+    heading(doc, "Background Questions");
+    field(doc, "Ever evicted from an apartment or residence?", input.everEvicted);
+    field(doc, "Ever convicted of a crime?", input.everConvicted);
+
     heading(doc, "Intended Occupants");
     if (input.occupants.length === 0) {
       doc.font("Helvetica").fontSize(10).text("None listed.");
@@ -78,14 +90,13 @@ export function generateApplicationPdf(
         doc.font("Helvetica").fontSize(10).text(`- ${occupant.name} — ${occupant.relationship}, age ${occupant.age}`);
       });
     }
-    field(doc, "Other adult applicants", input.otherAdultApplicants);
 
     heading(doc, "Pets");
     if (input.pets.length === 0) {
       doc.font("Helvetica").fontSize(10).text("None.");
     } else {
       input.pets.forEach((pet) => {
-        doc.font("Helvetica").fontSize(10).text(`- ${pet.type}, ${pet.breed}${pet.weight ? `, ${pet.weight}` : ""}`);
+        doc.font("Helvetica").fontSize(10).text(`- ${pet.type}, ${pet.breed}${pet.weight ? `, ${pet.weight} lbs` : ""}`);
       });
     }
 
@@ -110,7 +121,6 @@ export function generateApplicationPdf(
     if (input.applicationType === "rent-to-own") {
       heading(doc, "Purchase Details");
       field(doc, "Desired down payment", `$${input.desiredDownPayment ?? 0}`);
-      field(doc, "Purchase timeline", input.purchaseTimeline);
       field(doc, "Estimated credit range", input.estimatedCreditRange);
     }
 
