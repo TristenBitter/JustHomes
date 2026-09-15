@@ -12,6 +12,7 @@ function Contact() {
         eyebrow="Contact"
         title="Get in touch"
         subtitle="Have a question before you apply, or already submitted an application and need to follow up? Reach out — a real person on our team will get back to you."
+        tall
       />
 
       <div className="contact container">

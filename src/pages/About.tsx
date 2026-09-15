@@ -32,6 +32,7 @@ function About() {
         imageAlt="A JustHomes property in the Phoenix, Arizona area"
         eyebrow="About"
         title="About JustHomes"
+        tall
       />
 
       <div className="about container">

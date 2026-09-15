@@ -22,6 +22,7 @@ function ApplyHub() {
         eyebrow="Apply"
         title="Start your JustHomes application"
         subtitle="Choose the path that fits what you're looking for. Every step is completed online — no printing, no office visit."
+        tall
       />
 
       <div className="apply-hub container">
